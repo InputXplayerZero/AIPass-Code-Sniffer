@@ -42,9 +42,8 @@ This README contains all instructions on how to use the memory bank.
 - **Why**: Compact but unambiguous within reasonable timeframes
 
 ### Quick Example
-**Session**: Memory cleanup work on July 13, 2025  
-**Filename**: `CH-MEM-AUD-CLD-UPD-130725.md`  
-**ID**: `CH-MEM-AUD-CLD-UPD-130725`  
+**Session**: Memory cleanup work on July 13, 2025    
+**ID**: `GCH-MEM-AUD-CLD-UPD-130725`  
 **Meaning**: Chat-Memory-Audit-Claude-Updates-July13,2025  
 
 ### Document Structure Template
@@ -152,8 +151,8 @@ This README contains all instructions on how to use the memory bank.
 **UPD** - Indicates changes, edits, or updates were made to files/systems  
 
 ## Common Examples
-- `CH-PRAX-LOGS-DBG-UPD` - Chat about Prax Logs Debugging Updates
-- `CH-TRL-MEM-CLD-BLD` - Chat about TRL Memory Claude Building  
+- `GCH-PRAX-LOGS-DBG-UPD` - Chat about Prax Logs Debugging Updates
+- `GCH-TRL-MEM-CLD-BLD` - Chat about TRL Memory Claude Building  
 - `CH-AIPS-SIZE-CFG-FIX` - Chat about AIPass Size Configuration Fix
 - `CH-CTC-INST-DBG-UPD` - Chat about Claude Thread Continuity Installation Debugging Updates
 - `CH-MCP-CFG-CONN-FIX` - Chat about MCP Configuration Connection Fix
