@@ -5,6 +5,5 @@
 **Directory Map:** [SuperClaude-master_map.txt](./SuperClaude-master_map.txt)
 
 **Technology Stack:**
-*   **Core Language:** Python
-*   **Packaging:** `setuptools`
-*   **Primary Interaction:** Claude Code (via MCP integration)
+*   **Languages:** Python
+*   **Package Managers:** Poetry

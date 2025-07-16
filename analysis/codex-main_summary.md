@@ -5,8 +5,7 @@
 **Directory Map:** [codex-main_map.txt](./codex-main_map.txt)
 
 **Technology Stack:**
-*   **Core Languages:** Rust, TypeScript
-*   **Package Management:** `pnpm` (for the monorepo and TypeScript packages), `cargo` (for Rust, managed via Nix)
-*   **Environment Management:** Nix
-*   **CLI Framework:** Likely a combination of a Rust CLI framework and `pnpm` scripting.
-*   **Key Tools:** `prettier` (for formatting), `husky` (for git hooks)
+*   **Languages:** JavaScript, Node.js, Rust, TypeScript
+*   **Frameworks:** Express.js, React
+*   **Build Tools:** Prettier (Formatting), Vite, Vitest (Testing), esbuild
+*   **Package Managers:** Cargo, npm/yarn/pnpm

@@ -7,9 +7,5 @@
 **Technology Stack:**
 *   **Core Language:** Python
 *   **Package Management:** Poetry
-*   **LLM Integration:** `litellm`, `google-generativeai`, `anthropic`
-*   **Web & API:** `fastapi`, `uvicorn`
-*   **Automation & Control:** `selenium`, `pyautogui`
-*   **Code Execution:** `ipykernel`, `jupyter-client`
-*   **CLI:** `rich`, `typer`
-*   **Local AI:** `torch`, `transformers`
+*   **Frameworks:** CLI Framework (Python), FastAPI
+*   **Libraries:** Data Science/Analysis Libraries, `litellm`, `google-generativeai`, `anthropic`, `selenium`, `pyautogui`, `ipykernel`, `jupyter-client`, `rich`, `typer`, `torch`, `transformers`, `uvicorn`

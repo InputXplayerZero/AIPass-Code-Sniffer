@@ -5,8 +5,6 @@
 **Directory Map:** [DesktopCommanderMCP-main_map.txt](./DesktopCommanderMCP-main_map.txt)
 
 **Technology Stack:**
-*   **Core Language:** TypeScript
-*   **Runtime:** Node.js
-*   **MCP Integration:** `@modelcontextprotocol/sdk`
-*   **Code Search:** `@vscode/ripgrep`
-*   **Schema Validation:** `zod`
+*   **Languages:** JavaScript, Node.js, TypeScript
+*   **Libraries:** Model Context Protocol SDK
+*   **Package Managers:** npm/yarn/pnpm

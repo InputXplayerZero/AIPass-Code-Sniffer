@@ -5,112 +5,173 @@ import re
 
 def detect_tech_stack(project_path):
     tech_stack = {
-        "languages": [],
-        "frameworks": [],
-        "libraries": [],
-        "build_tools": [],
-        "package_managers": []
+        "languages": set(),
+        "frameworks": set(),
+        "libraries": set(),
+        "build_tools": set(),
+        "package_managers": set()
     }
 
-    # --- JavaScript/TypeScript Detection ---
-    package_json_path = os.path.join(project_path, "package.json")
-    if os.path.exists(package_json_path):
-        tech_stack["languages"].append("JavaScript/TypeScript")
-        tech_stack["package_managers"].append("npm/yarn/pnpm")
-        try:
-            with open(package_json_path, "r") as f:
-                package_data = json.load(f)
-                if "devDependencies" in package_data:
-                    if "typescript" in package_data["devDependencies"]:
-                        tech_stack["languages"].append("TypeScript")
-                    if "react" in package_data["devDependencies"] or "react" in package_data.get("dependencies", {}):
-                        tech_stack["frameworks"].append("React")
-                    if "next" in package_data["devDependencies"] or "next" in package_data.get("dependencies", {}):
-                        tech_stack["frameworks"].append("Next.js")
-                    if "express" in package_data["devDependencies"] or "express" in package_data.get("dependencies", {}):
-                        tech_stack["frameworks"].append("Express.js")
-                    if "webpack" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("Webpack")
-                    if "esbuild" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("esbuild")
-                    if "vite" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("Vite")
-                    if "jest" in package_data["devDependencies"] or "vitest" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("Testing Framework (Jest/Vitest)")
-                    if "eslint" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("ESLint")
-                    if "prettier" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("Prettier")
-                    if "turbo" in package_data["devDependencies"]:
-                        tech_stack["build_tools"].append("Turborepo")
+    # Helper to add unique items (now using sets)
+    def add_unique(category, item):
+        tech_stack[category].add(item)
 
-        except json.JSONDecodeError:
-            pass # Malformed JSON
+    for root, dirs, files in os.walk(project_path):
+        # Skip common non-code directories
+        dirs[:] = [d for d in dirs if d not in ('.git', 'node_modules', 'build', 'dist', 'venv', '.venv', '__pycache__')]
 
-    # --- Python Detection ---
-    requirements_txt_path = os.path.join(project_path, "requirements.txt")
-    pyproject_toml_path = os.path.join(project_path, "pyproject.toml")
-    
-    if os.path.exists(requirements_txt_path) or os.path.exists(pyproject_toml_path):
-        tech_stack["languages"].append("Python")
-        if os.path.exists(requirements_txt_path):
-            tech_stack["package_managers"].append("pip")
+        # --- JavaScript/TypeScript Detection ---
+        if "package.json" in files:
+            package_json_path = os.path.join(root, "package.json")
+            tsconfig_json_path = os.path.join(root, "tsconfig.json")
+
+            add_unique("languages", "JavaScript")
+            add_unique("languages", "Node.js") # Node.js is implied by package.json
+            add_unique("package_managers", "npm/yarn/pnpm")
             try:
-                with open(requirements_txt_path, "r") as f:
-                    content = f.read()
-                    if re.search(r"django", content, re.IGNORECASE):
-                        tech_stack["frameworks"].append("Django")
-                    if re.search(r"flask", content, re.IGNORECASE):
-                        tech_stack["frameworks"].append("Flask")
-                    if re.search(r"fastapi", content, re.IGNORECASE):
-                        tech_stack["frameworks"].append("FastAPI")
-                    if re.search(r"numpy|pandas|matplotlib", content, re.IGNORECASE):
-                        tech_stack["libraries"].append("Data Science/Analysis Libraries")
-                    if re.search(r"tensorflow|pytorch", content, re.IGNORECASE):
-                        tech_stack["libraries"].append("Machine Learning Libraries")
-            except Exception: # Catch all for file read errors
-                pass
-        
-        if os.path.exists(pyproject_toml_path):
-            tech_stack["package_managers"].append("Poetry")
-            try:
-                with open(pyproject_toml_path, "r") as f:
-                    pyproject_data = toml.load(f)
-                    if "tool" in pyproject_data and "poetry" in pyproject_data["tool"] and "dependencies" in pyproject_data["tool"]["poetry"]:
-                        dependencies = pyproject_data["tool"]["poetry"]["dependencies"]
-                        if "django" in dependencies:
-                            tech_stack["frameworks"].append("Django")
-                        if "flask" in dependencies:
-                            tech_stack["frameworks"].append("Flask")
-                        if "fastapi" in dependencies:
-                            tech_stack["frameworks"].append("FastAPI")
-                        if any(lib in dependencies for lib in ["numpy", "pandas", "matplotlib"]):
-                            tech_stack["libraries"].append("Data Science/Analysis Libraries")
-                        if any(lib in dependencies for lib in ["tensorflow", "pytorch"]):
-                            tech_stack["libraries"].append("Machine Learning Libraries")
-            except Exception: # Catch all for file read/toml parse errors
-                pass
+                with open(package_json_path, "r", encoding='utf-8') as f:
+                    package_data = json.load(f)
+                    
+                    all_deps = {**package_data.get("dependencies", {}), **package_data.get("devDependencies", {})}
 
-    # --- Java Detection ---
-    pom_xml_path = os.path.join(project_path, "pom.xml")
-    build_gradle_path = os.path.join(project_path, "build.gradle")
-    
-    if os.path.exists(pom_xml_path) or os.path.exists(build_gradle_path):
-        tech_stack["languages"].append("Java")
-        if os.path.exists(pom_xml_path):
-            tech_stack["build_tools"].append("Maven")
-        if os.path.exists(build_gradle_path):
-            tech_stack["build_tools"].append("Gradle")
+                    if "typescript" in all_deps or "typescript-eslint" in all_deps or os.path.exists(tsconfig_json_path):
+                        add_unique("languages", "TypeScript")
+                    
+                    # Frameworks
+                    if "react" in all_deps or "eslint-plugin-react" in all_deps or "react-devtools-core" in all_deps:
+                        add_unique("frameworks", "React")
+                    if "next" in all_deps:
+                        add_unique("frameworks", "Next.js")
+                    if "express" in all_deps:
+                        add_unique("frameworks", "Express.js")
+                    if "angular" in all_deps:
+                        add_unique("frameworks", "Angular")
+                    if "vue" in all_deps:
+                        add_unique("frameworks", "Vue.js")
+                    if "yargs" in all_deps:
+                        add_unique("frameworks", "Yargs (CLI)")
 
-    # --- Rust Detection ---
-    cargo_toml_path = os.path.join(project_path, "Cargo.toml")
-    if os.path.exists(cargo_toml_path):
-        tech_stack["languages"].append("Rust")
-        tech_stack["package_managers"].append("Cargo")
+                    # Build Tools / Linters / Testers
+                    if "webpack" in all_deps:
+                        add_unique("build_tools", "Webpack")
+                    if "esbuild" in all_deps:
+                        add_unique("build_tools", "esbuild")
+                    if "vite" in all_deps:
+                        add_unique("build_tools", "Vite")
+                    if "jest" in all_deps:
+                        add_unique("build_tools", "Jest (Testing)")
+                    if "vitest" in all_deps:
+                        add_unique("build_tools", "Vitest (Testing)")
+                    if "eslint" in all_deps:
+                        add_unique("build_tools", "ESLint (Linting)")
+                    if "prettier" in all_deps:
+                        add_unique("build_tools", "Prettier (Formatting)")
+                    if "turbo" in all_deps:
+                        add_unique("build_tools", "Turborepo (Monorepo)")
+                    if "gulp" in all_deps:
+                        add_unique("build_tools", "Gulp (Task Runner)")
+                    if "rollup" in all_deps:
+                        add_unique("build_tools", "Rollup (Bundler)")
 
-    # Remove duplicates and empty lists
+                    # Libraries (examples)
+                    if "lodash" in all_deps:
+                        add_unique("libraries", "Lodash (Utility)")
+                    if "axios" in all_deps or "node-fetch" in all_deps:
+                        add_unique("libraries", "HTTP Client")
+                    if "@modelcontextprotocol/sdk" in all_deps:
+                        add_unique("libraries", "Model Context Protocol SDK")
+                    if "electron" in all_deps:
+                        add_unique("frameworks", "Electron (Desktop App)")
+
+            except json.JSONDecodeError:
+                pass # Malformed JSON
+
+        # --- Python Detection ---
+        if "requirements.txt" in files or "pyproject.toml" in files:
+            add_unique("languages", "Python")
+            
+            requirements_txt_path = os.path.join(root, "requirements.txt")
+            if os.path.exists(requirements_txt_path):
+                add_unique("package_managers", "pip")
+                try:
+                    with open(requirements_txt_path, "r", encoding='utf-8') as f:
+                        content = f.read()
+                        if re.search(r"django", content, re.IGNORECASE):
+                            add_unique("frameworks", "Django")
+                        if re.search(r"flask", content, re.IGNORECASE):
+                            add_unique("frameworks", "Flask")
+                        if re.search(r"fastapi", content, re.IGNORECASE):
+                            add_unique("frameworks", "FastAPI")
+                        if re.search(r"numpy|pandas|scipy|matplotlib|seaborn", content, re.IGNORECASE):
+                            add_unique("libraries", "Data Science/Analysis Libraries")
+                        if re.search(r"tensorflow|pytorch|scikit-learn|huggingface", content, re.IGNORECASE):
+                            add_unique("libraries", "Machine Learning Libraries")
+                        if re.search(r"requests", content, re.IGNORECASE):
+                            add_unique("libraries", "Requests (HTTP Client)")
+                        if re.search(r"typer|click", content, re.IGNORECASE):
+                            add_unique("frameworks", "CLI Framework (Python)")
+                        if re.search(r"mcp", content, re.IGNORECASE):
+                            add_unique("libraries", "Model Context Protocol (Python)")
+
+                except Exception: # Catch all for file read errors
+                    pass
+            
+            pyproject_toml_path = os.path.join(root, "pyproject.toml")
+            if os.path.exists(pyproject_toml_path):
+                add_unique("package_managers", "Poetry")
+                try:
+                    with open(pyproject_toml_path, "r", encoding='utf-8') as f:
+                        pyproject_data = toml.load(f)
+                        if "tool" in pyproject_data and "poetry" in pyproject_data["tool"] and "dependencies" in pyproject_data["tool"]["poetry"]:
+                            dependencies = pyproject_data["tool"]["poetry"]["dependencies"]
+                            
+                            if "django" in dependencies:
+                                add_unique("frameworks", "Django")
+                            if "flask" in dependencies:
+                                add_unique("frameworks", "Flask")
+                            if "fastapi" in dependencies:
+                                add_unique("frameworks", "FastAPI")
+                            if any(lib in dependencies for lib in ["numpy", "pandas", "scipy", "matplotlib", "seaborn"]):
+                                add_unique("libraries", "Data Science/Analysis Libraries")
+                            if any(lib in dependencies for lib in ["tensorflow", "pytorch", "scikit-learn", "huggingface"]):
+                                add_unique("libraries", "Machine Learning Libraries")
+                            if "requests" in dependencies:
+                                add_unique("libraries", "Requests (HTTP Client)")
+                            if any(lib in dependencies for lib in ["typer", "click"]):
+                                add_unique("frameworks", "CLI Framework (Python)")
+                            if "mcp" in dependencies:
+                                add_unique("libraries", "Model Context Protocol (Python)")
+
+                except Exception: # Catch all for file read/toml parse errors
+                    pass
+
+        # --- Java Detection ---
+        if "pom.xml" in files or "build.gradle" in files:
+            add_unique("languages", "Java")
+            if "pom.xml" in files:
+                add_unique("build_tools", "Maven")
+            if "build.gradle" in files:
+                add_unique("build_tools", "Gradle")
+
+        # --- Rust Detection ---
+        if "Cargo.toml" in files:
+            add_unique("languages", "Rust")
+            add_unique("package_managers", "Cargo")
+
+        # --- Go Detection ---
+        if "go.mod" in files:
+            add_unique("languages", "Go")
+            add_unique("package_managers", "Go Modules")
+
+        # --- C# Detection ---
+        csproj_files = [f for f in files if f.endswith(".csproj")]
+        if csproj_files:
+            add_unique("languages", "C#")
+            add_unique("frameworks", ".NET")
+
+    # Convert sets to sorted lists for consistent output
     for key in tech_stack:
-        tech_stack[key] = sorted(list(set(tech_stack[key])))
+        tech_stack[key] = sorted(list(tech_stack[key]))
     
     return tech_stack
 

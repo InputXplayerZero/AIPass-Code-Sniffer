@@ -5,7 +5,8 @@
 **Directory Map:** [claudekeep-main_map.txt](./claudekeep-main_map.txt)
 
 **Technology Stack:**
-*   **Core Language:** TypeScript
-*   **Monorepo Tool:** `turbo` (Turborepo)
-*   **Package Manager:** `pnpm`
-*   **Runtime:** Node.js (implied by `package.json`)
+*   **Languages:** JavaScript, Node.js, TypeScript
+*   **Frameworks:** Next.js, React
+*   **Libraries:** Model Context Protocol SDK
+*   **Build Tools:** ESLint (Linting), Prettier (Formatting), Turborepo (Monorepo)
+*   **Package Managers:** npm/yarn/pnpm

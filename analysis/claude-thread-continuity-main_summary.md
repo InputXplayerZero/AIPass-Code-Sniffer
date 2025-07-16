@@ -5,5 +5,6 @@
 **Directory Map:** [claude-thread-continuity-main_map.txt](./claude-thread-continuity-main_map.txt)
 
 **Technology Stack:**
-*   **Core Language:** Python
-*   **Key Libraries:** `mcp`, `pydantic`
+*   **Languages:** Python
+*   **Libraries:** Model Context Protocol (Python)
+*   **Package Managers:** pip

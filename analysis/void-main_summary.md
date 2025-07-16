@@ -5,9 +5,8 @@
 **Directory Map:** [void-main_map.txt](./void-main_map.txt)
 
 **Technology Stack:**
-*   **Core Languages:** TypeScript, JavaScript
-*   **Frameworks/Libraries:** React, Node.js, Electron, Gulp, Webpack, Playwright
-*   **AI/LLM Integrations:** `@anthropic-ai/sdk`, `@google/genai`, `groq-sdk`, `ollama`, `openai`, `@modelcontextprotocol/sdk`
-*   **UI Components:** `lucide-react`, `react-tooltip`, `@floating-ui/react`
-*   **Terminal Emulation:** `@xterm/xterm`
-*   **Code Related:** `@vscode/ripgrep`, `vscode-oniguruma`, `vscode-textmate`
+*   **Languages:** JavaScript, Node.js, Rust, TypeScript
+*   **Frameworks:** Electron (Desktop App), Next.js, React
+*   **Libraries:** HTTP Client, Model Context Protocol SDK
+*   **Build Tools:** ESLint (Linting), Gulp (Task Runner), Webpack, esbuild
+*   **Package Managers:** Cargo, npm/yarn/pnpm

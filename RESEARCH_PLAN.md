@@ -50,5 +50,5 @@ To accelerate our research, we will build a suite of custom scripts.
 
 **Tools to Build:**
 1.  **`project_mapper.py` (Done):** Generates a file/directory map with depth control.
-2.  **`tech_stack_detector.py`:** A script that scans a project, identifies files like `package.json` or `requirements.txt`, and outputs a summary of the languages, frameworks, and key libraries.
+2.  **`tech_stack_detector.py` (Done):** A script that scans a project, identifies files like `package.json` or `requirements.txt`, and outputs a summary of the languages, frameworks, and key libraries.
 3.  **`dependency_visualizer.py` (Advanced):** A script that could parse code to trace `import`/`require` statements and generate a dependency graph (e.g., using Graphviz) to visualize how modules interact.
