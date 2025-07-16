@@ -1,0 +1,62 @@
+system-prompts-and-models-of-ai-tools-main/
+    LICENSE.md
+    README.md
+    Cluely/
+        Default Prompt.txt
+        Enterprise Prompt.txt
+    Cursor Prompts/
+        Agent Prompt v1.0.txt
+        Agent Prompt v1.2.txt
+        Agent Prompt.txt
+        Agent Tools v1.0.json
+        Chat Prompt.txt
+        Memory Prompt.txt
+        Memory Rating Prompt.txt
+    Devin AI/
+        Prompt.txt
+    dia/
+        Prompt.txt
+    Junie/
+        Prompt.txt
+    Lovable/
+        Prompt.txt
+    Manus Agent Tools & Prompt/
+        Agent loop.txt
+        Modules.txt
+        Prompt.txt
+        tools.json
+    Open Source prompts/
+        Bolt/
+            Prompt.txt
+        Cline/
+            Prompt.txt
+        Codex CLI/
+            Prompt.txt
+        RooCode/
+            Prompt.txt
+    Replit/
+        Prompt.txt
+        Tools.json
+    Same.dev/
+        Prompt.txt
+        Tools.json
+    Spawn/
+        Prompt.txt
+    Trae/
+        Chat Prompt.txt
+    v0 Prompts and Tools/
+        Prompt.txt
+    VSCode Agent/
+        Prompt.txt
+    Warp.dev/
+        Prompt.txt
+    Windsurf/
+        Prompt.txt
+        Tools.json
+    Xcode/
+        DocumentAction.txt
+        ExplainAction.txt
+        MessageAction.txt
+        PlaygroundAction.txt
+        PreviewAction.txt
+        System.txt

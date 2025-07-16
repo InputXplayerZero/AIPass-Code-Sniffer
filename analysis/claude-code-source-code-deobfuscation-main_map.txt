@@ -1,0 +1,25 @@
+claude-code-source-code-deobfuscation-main/
+    package-lock.json
+    package.json
+    README.md
+    claude-code/
+        LICENSE.md
+        package.json
+        tsconfig.json
+        scripts/
+            preinstall.js
+        src/
+            cli.ts
+            index.ts
+    specs/
+        architecture.md
+        command_reference.md
+        development.md
+        error_handling.md
+        features.md
+        index.md
+        installation.md
+        integration.md
+        LICENSE.md
+        overview.md
+        performance.md

@@ -1,0 +1,16 @@
+# Project Index
+
+This index provides a high-level overview of the analyzed open-source projects.
+
+## Projects:
+
+*   **gemini-cli-main:** A command-line AI workflow tool that connects to your tools, understands your code, and accelerates your workflows. ([Summary](./gemini-cli-main_summary.md))
+*   **open-interpreter-main:** Lets LLMs run code (Python, Javascript, Shell, and more) locally. You can chat with Open Interpreter through a ChatGPT-like interface in your terminal. ([Summary](./open-interpreter-main_summary.md))
+*   **codex-main:** A command-line coding agent from OpenAI that runs locally on your computer. It allows you to interact with your codebase using natural language, and it can execute commands, manipulate files, and iterate on your code. ([Summary](./codex-main_summary.md))
+*   **claude-code-source-code-deobfuscation-main:** A cleanroom deobfuscation of the official Claude Code npm package. Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands. ([Summary](./claude-code-source-code-deobfuscation-main_summary.md))
+*   **claude-thread-continuity-main:** An MCP (Model Context Protocol) server that automatically saves and restores project state for Claude AI threads, ensuring seamless conversation continuity by preventing context loss when token limits are hit. It includes features like automatic state persistence, seamless restoration, and an anti-fragmentation system. ([Summary](./claude-thread-continuity-main_summary.md))
+*   **claudekeep-main:** An experiment with Model Context Protocol (MCP) to save and share AI conversations from Claude Desktop. It includes an MCP server implementation that allows saving chats and a web app for viewing private and public conversations. ([Summary](./claudekeep-main_summary.md))
+*   **DesktopCommanderMCP-main:** An MCP (Model Context Protocol) server that extends Claude Desktop's capabilities, allowing AI to search, update, and manage files, and run terminal commands. It aims to turn Claude into a versatile assistant for coding, automation, and codebase exploration. ([Summary](./DesktopCommanderMCP-main_summary.md))
+*   **SuperClaude-master:** A framework that extends Claude Code with specialized commands, personas, and MCP server integration. It aims to make Claude Code more helpful for development work by adding features like specialized commands, smart personas, MCP server integration for docs, UI components, and browser automation, task management, and token optimization. ([Summary](./SuperClaude-master_summary.md))
+*   **system-prompts-and-models-of-ai-tools-main:** A collection of system prompts, tools, and AI models from various AI tools (e.g., v0, Cursor, Manus, Devin). It aims to provide insights into their structure and functionality. ([Summary](./system-prompts-and-models-of-ai-tools-main_summary.md))
+*   **void-main:** An open-source alternative to Cursor, providing an AI agent platform for codebases. It allows users to use AI agents on their codebase, checkpoint and visualize changes, and integrate any model or host locally. It is a fork of the VS Code repository. ([Summary](./void-main_summary.md))
