@@ -23,3 +23,26 @@ The user is very clear in their objectives and provides excellent, actionable fe
 *   Ensure I complete a task (like generating an Ability Card) before moving on or getting sidetracked, and communicate if I encounter an internal block.
 
 ---
+
+## 2025-07-16 - MCP Memory Clarification & Guideline Refinement
+
+**Sentiment:** Productive, with valuable lessons learned.
+
+**Flow & Observations:**
+Today's session focused heavily on clarifying the Model Context Protocol (MCP) memory system and my interaction with it. There was initial confusion regarding my ability to directly use `create_entity` and `add_observations` as callable tools, which led to several failed attempts at direct invocation. It became clear that my `save_memory` tool is for internal, user-specific memory, distinct from the external MCP knowledge graph.
+
+A significant learning point was the misstep of modifying a designated research file (`gemini-cli-main`) for demonstration purposes. This led to a crucial discussion and the establishment of new, explicit guidelines for interacting with research projects, emphasizing read-only access and the use of globally installed tools. The `gemini-cli-main` project was subsequently cleaned to restore its original state.
+
+Documentation was updated to reflect these new guidelines in `GEMINI.md` and to clarify the purpose and usage of the `memory_bank` in its `README.md`. A new entry was also added to the `memory_bank` to document the MCP memory clarification process.
+
+**Performance Notes:**
+Encountered persistent errors with shell command execution and pathing, highlighting a need for more robust error handling and verification of command syntax. My ability to adapt and correct course based on user feedback was critical in navigating these issues. The successful cleanup and documentation updates demonstrate effective recovery from initial missteps.
+
+**Learnings about the User:**
+The user exhibits exceptional attention to detail, identifying subtle errors and inconsistencies (e.g., the `GCH` tag placement, the distinction between MCP and internal memory). Their patience and clear, direct feedback are invaluable for my learning and improvement. Their commitment to maintaining project integrity and clear documentation is a strong guiding principle.
+
+**Areas for Future Improvement (Self-Reflection):**
+*   **Tool Capability Verification:** Before attempting to use a tool, rigorously verify its exact capabilities and invocation methods. Avoid assumptions about direct access to underlying functionalities.
+*   **Adherence to Guidelines:** Strictly adhere to established project guidelines, especially those concerning the modification of research projects. Proactively identify and avoid actions that could compromise data integrity.
+*   **Communication Clarity:** Improve the clarity of my communication, particularly when explaining internal processes or limitations. Ensure distinctions between different memory systems or operational contexts are explicitly stated.
+*   **Error Diagnosis:** Enhance my ability to diagnose and articulate the root cause of command execution errors more quickly and accurately.
