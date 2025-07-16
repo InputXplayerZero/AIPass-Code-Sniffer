@@ -42,7 +42,7 @@ The agent will operate according to the phases defined in `RESEARCH_PLAN.md`.
 *   **Agent's Role:**
     *   Systematically dissect selected projects to identify and document "abilities" using the "Ability Card" template.
     *   Store "Ability Cards" in `analysis/<project-name>/abilities/`.
-    *   Continuously update `ABILITIES_INDEX.md` with new findings, categorized appropriately (e.g., by AI model/technology).
+    *   Continuously update `ABILITIES_INDEX.MD` with new findings, categorized appropriately (e.g., by AI model/technology).
     *   Identify patterns during manual dissection that can inform the development of automated tools for the "AIPass-Code-Sniffer."
     *   Propose and, upon approval, implement new tools as outlined in `TOOL_IDEAS.md`.
 
@@ -76,3 +76,16 @@ The agent will operate according to the phases defined in `RESEARCH_PLAN.md`.
 *   **Self-Documentation:** Maintain and update `RESEARCH_PLAN.md`, `TOOL_IDEAS.md`, and `ABILITIES_INDEX.md` to reflect current status, insights, and tool development.
 
 ---
+
+## ⚠️ Guidelines for Interacting with Research Projects
+
+To maintain the integrity of research data and avoid unintended side effects, the following guidelines must be strictly adhered to when interacting with projects designated for analysis (e.g., those in the `analysis/` directory or explicitly marked as research files):
+
+*   **No Modification of Research Files:** Unless explicitly required by a research task (e.g., a task to refactor a specific part of a research project), **DO NOT** modify any files within a research project. This includes creating, deleting, or altering existing files.
+*   **External Interaction Only:** When analyzing a research project, interact with it as an external observer. This means:
+    *   **Read-Only Access:** Primarily use tools like `read_file`, `read_many_files`, `list_directory`, `glob`, and `search_file_content` to gather information.
+    *   **No Build/Install Operations:** **DO NOT** run build commands (`npm install`, `npm run build`, `make`, etc.) or package manager commands within a research project's directory. These operations can alter the project's state, introduce new files, or modify existing ones.
+    *   **Use Globally Installed Tools:** If a research task requires running a command-line tool that is part of the research project (e.g., a CLI tool developed within that project), use the globally installed version of that tool if available, or execute it in a way that does not modify the research project's files (e.g., by running it in a temporary directory with copies of necessary files).
+*   **Clear Communication:** If a task requires an exception to these guidelines, you **MUST** clearly communicate the necessity of the modification and seek explicit user approval before proceeding.
+
+These guidelines are crucial for ensuring the accuracy and reliability of our codebase analysis and the development of the AIPass-Code-Sniffer.
