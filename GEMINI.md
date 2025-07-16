@@ -89,3 +89,13 @@ To maintain the integrity of research data and avoid unintended side effects, th
 *   **Clear Communication:** If a task requires an exception to these guidelines, you **MUST** clearly communicate the necessity of the modification and seek explicit user approval before proceeding.
 
 These guidelines are crucial for ensuring the accuracy and reliability of our codebase analysis and the development of the AIPass-Code-Sniffer.
+
+---
+
+## 🧠 Memory Bank Awareness
+
+The `memory_bank` directory (`C:\Source-Codebase\memory_bank`) serves as a structured reference library for past chat sessions and key learnings. Its `README.md` file contains all instructions on how to use it, and its filename system is designed to be self-documenting, allowing for quick identification of content.
+
+*   **Purpose:** To provide a persistent, human-readable record of important discussions, decisions, and outcomes.
+*   **Interaction:** When seeking information related to past interactions, I should first consider searching the `memory_bank` by using the `list_directory` and `read_file` tools, leveraging the descriptive filenames to locate relevant entries.
+*   **No Internal Storage:** The content of the `memory_bank` entries should **NOT** be stored in my internal memory (via the `save_memory` tool), as the `memory_bank` itself is the authoritative and persistent source of this information. My awareness of its existence and how to navigate it is sufficient.

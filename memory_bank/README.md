@@ -7,6 +7,7 @@
 **Last Updated**: 2025-07-13  
 
 ## Purpose
+This README contains all instructions on how to use the memory bank.
 - Organize chat sessions with consistent naming
 - Enable easy searching of chat topics  
 - Track what was accomplished per session
@@ -50,7 +51,6 @@
 ```markdown
 # Chat Log: [Session Description]
 
-**ID**: [Same as filename]
 **Tags**: [Key tags used]
 **Date**: 2025-MM-DD
 **Participants**: Patrick, Claude
@@ -67,8 +67,8 @@
 ```
 
 ## Tag Format
-**Format**: `TYPE-SUBJECT-DETAIL-STATUS-DATE`  (Needs Review, Patrick Note)
-**Example**: `CH-PRAX-LOGS-DBG-UPD-130725`  
+**Format**: `AI SIGNATURE-SUBJECT-DETAIL-STATUS-DATE`  (Needs Review, Patrick Note)
+**Example**: `GCH-MCP-TOOL-LRN-160725`      
 
 **Rules**:
 - ALL CAPS
@@ -78,8 +78,8 @@
 - DETAIL modifier max 4 letters for precision
 
 ## Tag Format
-**Format**: `TYPE-SUBJECT-DETAIL-STATUS-DATE`  (Needs Review, Patrick Note)
-**Example**: `CH-PRAX-LOGS-DBG-UPD-130725`  
+**Format**: `AI SIGNATURE-SUBJECT-DETAIL-STATUS-DATE`  (Needs Review, Patrick Note)
+**Example**: `GCH-PRAX-LOGS-DBG-UPD-130725`  
 
 **Rules**:
 - ALL CAPS

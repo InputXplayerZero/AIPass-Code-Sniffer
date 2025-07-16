@@ -1,0 +1,32 @@
+{
+  "extraPaths": [
+    
+  ],
+  "exclude": [
+    "**/.venv",
+    "**/env",
+    "**/venv",
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/.mypy_cache",
+    "**/.git",
+    "**/.github",
+    "**/.vscode",
+    "**/build",
+    "**/dist",
+    "**/*.egg-info",
+    "**/target",
+    "**/out",
+    "**/bin",
+    "**/obj",
+    "**/tmp",
+    "**/*.min.js",
+    "**/*.bundle.js",
+    
+  ],
+  "include": [
+    "."
+  ],
+  "typeCheckingMode": "basic"
+}
