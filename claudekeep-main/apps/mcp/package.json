@@ -1,0 +1,36 @@
+{
+  "name": "claudekeep-mcp",
+  "version": "0.2.1",
+  "description": "An MCP Server for saving and sharing prompts, transcripts and more.",
+  "private": false,
+  "license": "MIT",
+  "repository": "https://github.com/sdairs/claudekeep",
+  "author": "sdairs",
+  "issues": "https://github.com/sdairs/claudekeep/issues",
+  "type": "module",
+  "bin": {
+    "claudekeep-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "prepare": "pnpm run build",
+    "watch": "tsc --watch",
+    "inspector": "npx @modelcontextprotocol/inspector dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "@types/pg": "^8.11.10",
+    "shx": "^0.3.4",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
