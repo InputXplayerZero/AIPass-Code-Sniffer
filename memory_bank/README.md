@@ -23,7 +23,7 @@ This README contains all instructions on how to use the memory bank.
 
 ### File Creation Steps
 1. **Filename = ID**: Your filename should match your document ID exactly
-2. **Use the format**: `TYPE-SUBJECT-DETAIL-STATUS-DATE.md`
+2. **Use the format**: `AI SIGNATURE-SUBJECT-DETAIL-STATUS-DATE.md`
 3. **Copy structure**: Use existing entries in this folder as templates
 4. **Document outcomes**: Focus on what was accomplished, not just what was discussed
 
