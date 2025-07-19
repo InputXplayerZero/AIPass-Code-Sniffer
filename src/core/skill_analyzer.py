@@ -33,7 +33,7 @@ class SkillAnalyzer:
     def __init__(self):
         self.detector = AdvancedSkillDetector()
     
-    def analyze_codebase(self, codebase_path: str, output_dir: str = None) -> SkillAnalysisReport:
+    def analyze_codebase(self, codebase_path: str, output_dir: Optional[str] = None) -> SkillAnalysisReport:
         """Perform comprehensive codebase skill analysis."""
         print(f"🔍 Starting skill analysis of {codebase_path}...")
         
@@ -188,7 +188,7 @@ class SkillAnalyzer:
         # Phase 2: Core integrations (medium complexity, high value)
         phase2_skills = [
             skill for skill in high_priority_skills
-            if skill.category in [SkillCategory.API_INTEGRATION, SkillCategory.CLI_COMMANDS]
+            if skill.category in [SkillCategory.API_FRAMEWORKS, SkillCategory.CLI_OPERATIONS]
         ][:5]
         
         if phase2_skills:
@@ -205,7 +205,7 @@ class SkillAnalyzer:
         # Phase 3: Advanced features (high complexity, high value)
         phase3_skills = [
             skill for skill in high_priority_skills
-            if skill.category in [SkillCategory.AI_TOOLS, SkillCategory.DATA_PROCESSING]
+            if skill.category in [SkillCategory.NATURAL_LANGUAGE, SkillCategory.MCP_INTEGRATION, SkillCategory.PROMPT_ENGINEERING]
         ][:5]
         
         if phase3_skills:
