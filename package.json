@@ -1,4 +1,7 @@
 {
+  "name": "AIPass-Code-Sniffer",
+  "version": "1.0.0",
+  "description": "AI-powered code analysis and skill discovery tool for the AIPass ecosystem",
   "dependencies": {
     "@modelcontextprotocol/server-memory": "^2025.4.25",
     "typescript": "^5.8.3"

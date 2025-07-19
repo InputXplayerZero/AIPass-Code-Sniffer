@@ -10,7 +10,7 @@ import os
 # Add the src directory to the path so we can import our modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from commands.analyze import analyze_command
+from cli.commands.analyze import analyze_command
 from utils.index_updater import update_abilities_index
 
 
