@@ -1,0 +1,65 @@
+{
+  "ai_services": {
+    "openai": {
+      "api_key": "${OPENAI_API_KEY}",
+      "models": {
+        "summarization": "gpt-4o-mini",
+        "analysis": "gpt-4"
+      },
+      "enabled": true
+    },
+    "anthropic": {
+      "api_key": "${ANTHROPIC_API_KEY}",
+      "models": {
+        "analysis": "claude-3-5-sonnet-20241022"
+      },
+      "enabled": false
+    }
+  },
+  "analysis_settings": {
+    "default_service": "openai",
+    "fallback_enabled": true,
+    "cache_responses": true,
+    "cache_duration_hours": 24,
+    "batch_size": 10,
+    "timeout_seconds": 30
+  },
+  "quality_thresholds": {
+    "excellent": 8.5,
+    "good": 7.0,
+    "fair": 5.5,
+    "poor": 3.0
+  },
+  "analysis_levels": {
+    "basic": {
+      "enabled_features": ["syntax", "dependencies"],
+      "ai_features": []
+    },
+    "enhanced": {
+      "enabled_features": ["syntax", "dependencies", "ai_summary"],
+      "ai_features": ["summary"]
+    },
+    "premium": {
+      "enabled_features": ["syntax", "dependencies", "ai_summary", "semantic_analysis", "pattern_detection", "quality_assessment"],
+      "ai_features": ["summary", "semantic", "patterns", "quality"]
+    }
+  },
+  "prompt_templates": {
+    "semantic_analysis": {
+      "system_prompt": "You are an expert code analyst specializing in semantic understanding and business context recognition.",
+      "user_prompt_template": "Analyze this {language} code and provide semantic understanding:\n\nFile: {file_path}\nCode:\n```{language}\n{code}\n```\n\nProvide JSON response with business_context, architectural_pattern, design_patterns, quality_score, recommendations, and domain_type."
+    },
+    "pattern_detection": {
+      "system_prompt": "You are an expert in software design patterns and architectural analysis.",
+      "user_prompt_template": "Analyze this {language} code for patterns:\n\n```{language}\n{code}\n```\n\nReturn JSON with react_patterns, architectural_patterns, design_patterns, anti_patterns, and safety_patterns."
+    },
+    "quality_assessment": {
+      "system_prompt": "You are a senior software engineer specializing in code quality assessment and best practices.",
+      "user_prompt_template": "Assess the quality of this code:\n\nContext: {context}\nCode:\n```\n{code}\n```\n\nReturn JSON with quality scores and detailed analysis."
+    },
+    "summary_generation": {
+      "system_prompt": "You are a technical writer specializing in clear, concise code documentation.",
+      "user_prompt_template": "Generate a clear, human-readable summary of this code:\n\nContext: {context}\nCode:\n```\n{code}\n```\n\nWrite 2-3 paragraphs explaining what it does, how it works, and why it's designed this way."
+    }
+  }
+}

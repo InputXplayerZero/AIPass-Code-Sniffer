@@ -10,9 +10,7 @@ import os
 # Add the src directory to the path so we can import our modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-# Import functions will be added when we refactor the main functions
-# from core.ability_extractor import main as extract_abilities
-# from core.dependency_visualizer import main as visualize_dependencies
+from commands.analyze import analyze_command
 from utils.index_updater import update_abilities_index
 
 
@@ -25,10 +23,31 @@ def main():
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
-    # Extract abilities command
+    # Enhanced analysis command (replaces old extract)
+    analyze_parser = subparsers.add_parser(
+        'analyze', 
+        help='Analyze codebase with AI-enhanced semantic understanding'
+    )
+    analyze_parser.add_argument(
+        'path', 
+        help='Path to the file or directory to analyze'
+    )
+    analyze_parser.add_argument(
+        '--level', '-l',
+        choices=['basic', 'enhanced', 'premium'],
+        default='enhanced',
+        help='Analysis level: basic (syntax only), enhanced (AI summaries), premium (full AI analysis)'
+    )
+    analyze_parser.add_argument(
+        '--output', '-o',
+        default='./output/ability_cards',
+        help='Output directory for ability cards (default: ./output/ability_cards)'
+    )
+    
+    # Legacy extract command (redirects to analyze)
     extract_parser = subparsers.add_parser(
         'extract', 
-        help='Extract abilities from codebase'
+        help='Extract abilities from codebase (legacy - use analyze instead)'
     )
     extract_parser.add_argument(
         'path', 
@@ -73,24 +92,37 @@ def main():
         return 1
     
     try:
-        if args.command == 'extract':
-            print(f"Extracting abilities from: {args.path}")
-            print(f"Output directory: {args.output}")
-            print("⚠️  Extract functionality will be implemented in Phase 3")
-            print("   Current tools are in src/core/ability_extractor.py")
+        if args.command == 'analyze':
+            # Run enhanced analysis
+            import asyncio
+            return asyncio.run(analyze_command(
+                args.path, 
+                args.level, 
+                args.output
+            ))
+            
+        elif args.command == 'extract':
+            # Legacy command - redirect to analyze with enhanced level
+            print("ℹ️ 'extract' command is deprecated. Use 'analyze' instead.")
+            print(f"Running enhanced analysis on: {args.path}")
+            import asyncio
+            return asyncio.run(analyze_command(
+                args.path, 
+                'enhanced', 
+                args.output
+            ))
             
         elif args.command == 'visualize':
             print(f"Visualizing dependencies for: {args.path}")
             print(f"Output directory: {args.output}")
-            print("⚠️  Visualize functionality will be implemented in Phase 3")
-            print("   Current tools are in src/core/dependency_visualizer.py")
+            print("⚠️  Standalone visualize functionality will be implemented in Phase 3")
+            print("   Use 'analyze' command for comprehensive analysis including dependencies")
             
         elif args.command == 'index':
             print(f"Updating abilities index from: {args.analysis_dir}")
             update_abilities_index(args.analysis_dir)
-            
-        print("✅ Operation completed successfully!")
-        return 0
+            print("✅ Index updated successfully!")
+            return 0
         
     except Exception as e:
         print(f"❌ Error: {e}")
