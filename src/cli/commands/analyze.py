@@ -7,6 +7,8 @@ import sys
 import json
 import asyncio
 from typing import Optional, Dict, Any
+from datetime import datetime
+from pathlib import Path
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -91,7 +93,6 @@ class EnhancedAnalyzer:
                 analysis = await analyze_typescript_file_enhanced(file_path, analysis_level)
                 
                 # Generate enhanced ability card
-                from analyzers.typescript.semantic_analyzer import EnhancedTypeScriptAnalyzer
                 analyzer = EnhancedTypeScriptAnalyzer(self.config)
                 ability_card = analyzer.to_enhanced_ability_card(analysis)
                 
@@ -230,24 +231,42 @@ Python module with {len(imports)} imports detected.
         }
 
 
-async def analyze_command(path: str, analysis_level: str = "enhanced", 
-                         output_dir: str = "./output/ability_cards") -> int:
-    """Main analyze command function."""
-    print(f"🚀 Starting enhanced analysis...")
-    print(f"📂 Target: {path}")
+async def analyze_command(args):
+    """Enhanced analysis command with AI-powered semantic analysis."""
+    target_path = args.target
+    analysis_level = args.level
+    
+    # Create organized output directory structure
+    base_output_dir = args.output or "./output/ability_cards"
+    
+    # Create scan-specific folder
+    target_name = os.path.basename(os.path.abspath(target_path))
+    if not target_name:  # Handle root directory case
+        target_name = "root"
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    scan_folder = f"{target_name}_{timestamp}"
+    output_dir = os.path.join(base_output_dir, scan_folder)
+    
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    print("🚀 Starting enhanced analysis...")
+    print(f"📂 Target: {target_path}")
     print(f"📊 Analysis Level: {analysis_level}")
+    print(f"📁 Scan Folder: {scan_folder}")
     print(f"📁 Output Directory: {output_dir}")
     print()
     
     analyzer = EnhancedAnalyzer()
     
     try:
-        if os.path.isfile(path):
-            result = await analyzer.analyze_file(path, analysis_level, output_dir)
-        elif os.path.isdir(path):
-            result = await analyzer.analyze_directory(path, analysis_level, output_dir)
+        if os.path.isfile(target_path):
+            result = await analyzer.analyze_file(target_path, analysis_level, output_dir)
+        elif os.path.isdir(target_path):
+            result = await analyzer.analyze_directory(target_path, analysis_level, output_dir)
         else:
-            print(f"❌ Path not found: {path}")
+            print(f"❌ Path not found: {target_path}")
             return 1
         
         if "error" in result:

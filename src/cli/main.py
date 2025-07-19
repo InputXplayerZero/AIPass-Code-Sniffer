@@ -95,22 +95,26 @@ def main():
         if args.command == 'analyze':
             # Run enhanced analysis
             import asyncio
-            return asyncio.run(analyze_command(
-                args.path, 
-                args.level, 
-                args.output
-            ))
+            # Create a compatible args object
+            analyze_args = type('Args', (), {
+                'target': args.path,
+                'level': args.level,
+                'output': args.output
+            })()
+            return asyncio.run(analyze_command(analyze_args))
             
         elif args.command == 'extract':
             # Legacy command - redirect to analyze with enhanced level
             print("ℹ️ 'extract' command is deprecated. Use 'analyze' instead.")
             print(f"Running enhanced analysis on: {args.path}")
             import asyncio
-            return asyncio.run(analyze_command(
-                args.path, 
-                'enhanced', 
-                args.output
-            ))
+            # Create a compatible args object
+            analyze_args = type('Args', (), {
+                'target': args.path,
+                'level': 'enhanced',
+                'output': args.output
+            })()
+            return asyncio.run(analyze_command(analyze_args))
             
         elif args.command == 'visualize':
             print(f"Visualizing dependencies for: {args.path}")
