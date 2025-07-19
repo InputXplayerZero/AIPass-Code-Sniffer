@@ -319,7 +319,7 @@ class EnhancedPythonAnalyzer:
         
         # Start with header
         content = f"# {'Enhanced ' if analysis.ai_summary else ''}Ability Card: {file_name}\n\n"
-        content += f"**File:** `{analysis.file_path}`  \n"
+        content += f"**File:** [`{os.path.basename(analysis.file_path)}`](file:///{os.path.abspath(analysis.file_path)})  \n"
         content += f"**Full Path:** `{os.path.abspath(analysis.file_path)}`  \n"
         content += f"**Language:** Python  \n"
         content += f"**Analysis Level:** {'Enhanced with AI' if analysis.ai_summary else 'Basic'}\n\n"

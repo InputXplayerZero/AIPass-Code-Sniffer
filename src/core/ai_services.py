@@ -324,7 +324,7 @@ Write for developers who need to understand this code quickly.
             
             # Track token usage
             if hasattr(response, 'usage') and response.usage:
-                self.total_tokens += response.usage.total_tokens
+                self.total_tokens_used += response.usage.total_tokens
                 self.total_cost += self._calculate_cost(response.usage.total_tokens, "gpt-4o-mini")
                 print(f"🔤 Tokens used: {response.usage.total_tokens} | Cost: ${self._calculate_cost(response.usage.total_tokens, 'gpt-4o-mini'):.4f}")
             

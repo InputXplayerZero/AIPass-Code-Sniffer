@@ -338,7 +338,8 @@ class EnhancedTypeScriptAnalyzer:
         
         return f"""# Enhanced Ability Card: {ability_name}
 
-**File:** `{analysis.file_path}`  
+**File:** [`{os.path.basename(analysis.file_path)}`](file:///{analysis.file_path})  
+**Full Path:** `{analysis.file_path}`  
 **Language:** TypeScript/JavaScript  
 **Analysis Level:** Enhanced with AI
 
