@@ -1,7 +1,7 @@
 """
-Advanced Skill Detection Engine for AIPass-Code-Sniffer
+Enhanced Skill Detection Engine for AIPass-Code-Sniffer
 
-Comprehensive skill detection and classification for atomic, reusable code modules.
+Comprehensive skill detection with expanded patterns and semantic analysis.
 """
 
 import ast
@@ -26,6 +26,11 @@ class SkillCategory(Enum):
     PROMPT_ENGINEERING = "prompt_engineering"  # Template systems, context management
     MCP_INTEGRATION = "mcp_integration"  # Model Context Protocol implementations
     API_FRAMEWORKS = "api_frameworks"  # HTTP clients, authentication, rate limiting
+    
+    # Enhanced Categories
+    COMMUNICATION = "communication"  # Email, messaging, notifications
+    AUTHENTICATION = "authentication"  # Login, validation, security
+    DATA_TRANSFORMATION = "data_transformation"  # Parsing, formatting, conversion
     
     # Legacy/Utility Categories
     UTILITY_FUNCTIONS = "utility_functions"
@@ -58,85 +63,294 @@ class SkillModule:
     file_path: str
     extraction_priority: float = 0.5
 
-class AdvancedSkillDetector:
-    """Advanced skill detection engine."""
+class EnhancedSkillDetector:
+    """Enhanced skill detection engine with broader pattern recognition."""
     
     def __init__(self):
-        self.patterns = self._init_patterns()
+        self.patterns = self._init_enhanced_patterns()
+        self.semantic_patterns = self._init_semantic_patterns()
     
-    def _init_patterns(self) -> Dict[SkillCategory, Dict[str, Any]]:
-        """Initialize detection patterns."""
+    def _init_enhanced_patterns(self) -> Dict[SkillCategory, Dict[str, Any]]:
+        """Initialize enhanced detection patterns with broader coverage."""
         patterns = {
             # Core Performance Modules
             SkillCategory.CLI_OPERATIONS: {
-                "keywords": ["command", "cli", "args", "argv", "commander", "yargs", "option", "flag", "subcommand", "parse", "terminal", "console", "stdin", "stdout", "stderr", "process"],
-                "imports": ["argparse", "click", "commander", "yargs", "inquirer", "process"],
-                "confidence": 0.95
+                "keywords": [
+                    # Direct CLI terms
+                    "command", "cli", "args", "argv", "commander", "yargs", "option", "flag", "subcommand",
+                    # Process and execution
+                    "execute", "run", "invoke", "call", "spawn", "exec", "process", "shell",
+                    # Terminal I/O
+                    "terminal", "console", "stdin", "stdout", "stderr", "pipe", "input", "output",
+                    # Parsing and handling
+                    "parse", "handle", "dispatch", "route"
+                ],
+                "function_patterns": [
+                    r".*command.*", r".*execute.*", r".*run.*", r".*invoke.*", r".*spawn.*",
+                    r".*parse.*args.*", r".*handle.*args.*", r".*dispatch.*", r".*route.*"
+                ],
+                "imports": ["argparse", "click", "commander", "yargs", "inquirer", "process", "subprocess"],
+                "confidence": 0.8,
+                "base_confidence": 0.6
             },
+            
             SkillCategory.FILE_OPERATIONS: {
-                "keywords": ["read", "write", "file", "path", "directory", "fs", "readFile", "writeFile", "createFile", "deleteFile", "copyFile", "moveFile", "exists", "stat", "mkdir", "rmdir", "watch", "watcher"],
-                "imports": ["fs", "path", "os", "glob", "chokidar", "watchdog"],
-                "confidence": 0.95
+                "keywords": [
+                    # Basic file ops
+                    "read", "write", "file", "path", "directory", "folder",
+                    # File system operations
+                    "create", "delete", "copy", "move", "rename", "exists", "stat", "mkdir", "rmdir",
+                    # File I/O
+                    "open", "close", "save", "load", "import", "export",
+                    # File watching
+                    "watch", "monitor", "track", "observe",
+                    # File system navigation
+                    "list", "find", "search", "walk", "traverse"
+                ],
+                "function_patterns": [
+                    r".*read.*", r".*write.*", r".*save.*", r".*load.*", r".*create.*file.*",
+                    r".*delete.*", r".*copy.*", r".*move.*", r".*list.*", r".*find.*",
+                    r"get.*file.*", r"set.*file.*", r".*directory.*", r".*folder.*"
+                ],
+                "imports": ["fs", "path", "os", "glob", "chokidar", "watchdog", "pathlib", "shutil"],
+                "confidence": 0.8,
+                "base_confidence": 0.6
             },
+            
             SkillCategory.CODE_PROCESSING: {
-                "keywords": ["ast", "parse", "syntax", "transform", "generate", "compile", "transpile", "babel", "typescript", "eslint", "prettier", "acorn", "esprima"],
+                "keywords": [
+                    # AST and parsing
+                    "ast", "parse", "syntax", "tree", "node", "visitor",
+                    # Code transformation
+                    "transform", "generate", "compile", "transpile", "convert",
+                    # Code analysis
+                    "analyze", "scan", "lint", "format", "validate",
+                    # Language tools
+                    "babel", "typescript", "eslint", "prettier", "acorn", "esprima"
+                ],
+                "function_patterns": [
+                    r".*parse.*", r".*transform.*", r".*generate.*", r".*compile.*",
+                    r".*analyze.*", r".*scan.*", r".*lint.*", r".*format.*"
+                ],
                 "imports": ["ast", "babel", "typescript", "esprima", "acorn", "@babel/core", "@typescript-eslint"],
-                "confidence": 0.98
+                "confidence": 0.9,
+                "base_confidence": 0.7
             },
+            
             SkillCategory.INDEXING_SYSTEMS: {
-                "keywords": ["search", "index", "categorize", "metadata", "extract", "classify", "tag", "filter", "sort", "elasticsearch", "solr", "lucene"],
+                "keywords": [
+                    # Search and retrieval
+                    "search", "find", "query", "lookup", "retrieve", "fetch", "get",
+                    # Organization
+                    "index", "categorize", "classify", "tag", "label", "group",
+                    # Data operations
+                    "filter", "sort", "rank", "score", "match", "compare",
+                    # Metadata
+                    "metadata", "extract", "collect", "gather", "aggregate",
+                    # Search engines
+                    "elasticsearch", "solr", "lucene", "whoosh"
+                ],
+                "function_patterns": [
+                    r".*search.*", r".*find.*", r".*query.*", r".*lookup.*", r".*retrieve.*",
+                    r".*index.*", r".*categorize.*", r".*classify.*", r".*filter.*", r".*sort.*",
+                    r"get.*", r"find.*", r"search.*", r"list.*"
+                ],
                 "imports": ["elasticsearch", "solr", "whoosh", "lunr"],
-                "confidence": 0.9
+                "confidence": 0.8,
+                "base_confidence": 0.6
             },
+            
             SkillCategory.MEMORY_SYSTEMS: {
-                "keywords": ["cache", "persist", "state", "storage", "redis", "memcache", "sqlite", "leveldb", "store", "session", "memory"],
+                "keywords": [
+                    # Storage and persistence (more specific)
+                    "cache", "store", "persist", "save", "restore", "backup", "archive",
+                    # State management (refined)
+                    "state", "session", "context", "memory", "data", "storage",
+                    # Cache systems
+                    "redis", "memcache", "sqlite", "leveldb", "lmdb",
+                    # Operations (more specific to avoid noise)
+                    "initialize", "reset_state", "clear_cache", "flush", "sync", "update_state",
+                    "checkpoint", "snapshot"
+                ],
+                "function_patterns": [
+                    r".*save.*", r".*load.*", r".*persist.*", r".*restore.*",
+                    r".*cache.*", r".*store.*", r".*state.*", r".*memory.*", 
+                    r".*reset.*", r".*backup.*", r".*checkpoint.*",
+                    r".*initialize.*", r".*sync.*"  # More specific patterns
+                ],
                 "imports": ["redis", "memcache", "sqlite3", "leveldb", "lmdb"],
-                "confidence": 0.92
+                "confidence": 0.85,  # Higher base confidence
+                "base_confidence": 0.7  # Higher base confidence
             },
             
             # Advanced Capabilities
             SkillCategory.NATURAL_LANGUAGE: {
-                "keywords": ["nlp", "text", "embedding", "semantic", "tokenize", "sentiment", "language", "spacy", "nltk", "transformers", "bert"],
+                "keywords": [
+                    # NLP core
+                    "nlp", "text", "language", "linguistic", "semantic", "syntax",
+                    # Processing
+                    "tokenize", "parse", "analyze", "process", "extract",
+                    # Understanding
+                    "understand", "interpret", "meaning", "context", "intent",
+                    # Generation
+                    "generate", "complete", "respond", "chat", "conversation",
+                    # ML/AI
+                    "embedding", "vector", "similarity", "sentiment", "classification",
+                    # Libraries
+                    "spacy", "nltk", "transformers", "bert", "gpt", "openai"
+                ],
+                "function_patterns": [
+                    r".*chat.*", r".*message.*", r".*respond.*", r".*reply.*", r".*conversation.*",
+                    r".*text.*", r".*language.*", r".*nlp.*", r".*semantic.*", r".*embedding.*",
+                    r".*tokenize.*", r".*parse.*text.*", r".*analyze.*text.*"
+                ],
                 "imports": ["spacy", "nltk", "transformers", "sentence-transformers", "openai"],
-                "confidence": 0.95
-            },
-            SkillCategory.PROMPT_ENGINEERING: {
-                "keywords": ["prompt", "template", "context", "completion", "chat", "system", "user", "assistant", "role", "message"],
-                "imports": ["jinja2", "mustache", "handlebars"],
-                "confidence": 0.9
-            },
-            SkillCategory.MCP_INTEGRATION: {
-                "keywords": ["mcp", "model", "context", "protocol", "server", "client", "resource", "tool", "capability"],
-                "imports": ["mcp", "@modelcontextprotocol"],
-                "confidence": 0.98
-            },
-            SkillCategory.API_FRAMEWORKS: {
-                "keywords": ["api", "request", "http", "fetch", "axios", "endpoint", "rest", "graphql", "webhook", "client", "server", "response", "auth", "rate", "limit"],
-                "imports": ["requests", "axios", "fetch", "express", "fastapi", "flask", "django"],
-                "confidence": 0.92
+                "confidence": 0.8,
+                "base_confidence": 0.6
             },
             
-            # Legacy/Utility Categories
-            SkillCategory.CONFIGURATION: {
-                "keywords": ["config", "settings", "options", "preferences", "env", "environment", "dotenv", "yaml", "toml", "ini"],
-                "imports": ["dotenv", "config", "yaml", "toml"],
-                "confidence": 0.8
+            SkillCategory.COMMUNICATION: {
+                "keywords": [
+                    # Email
+                    "email", "mail", "send", "receive", "inbox", "message", "smtp", "imap",
+                    # Messaging
+                    "notify", "notification", "alert", "broadcast", "publish", "subscribe",
+                    # Communication
+                    "communicate", "transmit", "deliver", "dispatch", "forward"
+                ],
+                "function_patterns": [
+                    r".*mail.*", r".*email.*", r".*send.*", r".*receive.*", r".*notify.*",
+                    r".*message.*", r".*communicate.*", r".*transmit.*", r".*deliver.*"
+                ],
+                "imports": ["smtplib", "email", "imaplib", "poplib"],
+                "confidence": 0.9,
+                "base_confidence": 0.7
             },
+            
+            SkillCategory.API_FRAMEWORKS: {
+                "keywords": [
+                    # HTTP and networking
+                    "api", "http", "https", "request", "response", "client", "server",
+                    # Methods and protocols
+                    "get", "post", "put", "delete", "patch", "fetch", "call", "invoke",
+                    # REST and GraphQL
+                    "rest", "restful", "graphql", "endpoint", "route", "url", "uri",
+                    # Authentication and security
+                    "auth", "authenticate", "authorize", "token", "key", "oauth",
+                    # Rate limiting
+                    "rate", "limit", "throttle", "quota",
+                    # Libraries
+                    "requests", "axios", "fetch", "express", "fastapi", "flask", "django"
+                ],
+                "function_patterns": [
+                    r".*request.*", r".*fetch.*", r".*call.*", r".*invoke.*", r".*api.*",
+                    r".*http.*", r".*auth.*", r".*authenticate.*", r".*token.*",
+                    r"get.*", r"post.*", r"put.*", r"delete.*", r"send.*", r"receive.*"
+                ],
+                "imports": ["requests", "axios", "fetch", "express", "fastapi", "flask", "django", "urllib"],
+                "confidence": 0.8,
+                "base_confidence": 0.6
+            },
+            
+            # Utility and support
             SkillCategory.ERROR_HANDLING: {
-                "keywords": ["error", "exception", "try", "catch", "throw", "handle", "validate", "assert", "debug", "log", "warn"],
-                "imports": ["winston", "pino", "debug"],
-                "confidence": 0.75
+                "keywords": [
+                    "error", "exception", "try", "catch", "throw", "raise", "handle",
+                    "validate", "verify", "check", "assert", "debug", "log", "warn",
+                    "fail", "recover", "retry", "fallback"
+                ],
+                "function_patterns": [
+                    r".*error.*", r".*exception.*", r".*handle.*", r".*validate.*",
+                    r".*verify.*", r".*check.*", r".*debug.*", r".*log.*"
+                ],
+                "imports": ["winston", "pino", "debug", "logging"],
+                "confidence": 0.7,
+                "base_confidence": 0.5
             },
+            
             SkillCategory.UTILITY_FUNCTIONS: {
-                "keywords": ["util", "helper", "common", "shared", "library", "tool", "format", "convert", "calculate"],
+                "keywords": [
+                    "util", "utility", "helper", "common", "shared", "library", "tool",
+                    "format", "convert", "transform", "calculate", "compute", "process",
+                    "clean", "normalize", "validate", "sanitize"
+                ],
+                "function_patterns": [
+                    r".*util.*", r".*helper.*", r".*format.*", r".*convert.*",
+                    r".*transform.*", r".*calculate.*", r".*process.*", r".*clean.*"
+                ],
                 "imports": ["lodash", "ramda", "utils"],
-                "confidence": 0.6
+                "confidence": 0.6,
+                "base_confidence": 0.4
             }
         }
         return patterns
     
+    def _init_semantic_patterns(self) -> Dict[str, SkillCategory]:
+        """Initialize semantic function name patterns (refined for accuracy)."""
+        return {
+            # Common CRUD operations
+            "create": SkillCategory.FILE_OPERATIONS,
+            "read": SkillCategory.FILE_OPERATIONS,
+            "update": SkillCategory.FILE_OPERATIONS,
+            "delete": SkillCategory.FILE_OPERATIONS,
+            "get": SkillCategory.INDEXING_SYSTEMS,
+            "set": SkillCategory.MEMORY_SYSTEMS,
+            "put": SkillCategory.MEMORY_SYSTEMS,
+            "post": SkillCategory.API_FRAMEWORKS,
+            
+            # Communication patterns
+            "send": SkillCategory.COMMUNICATION,
+            "receive": SkillCategory.COMMUNICATION,
+            "mail": SkillCategory.COMMUNICATION,
+            "email": SkillCategory.COMMUNICATION,
+            "notify": SkillCategory.COMMUNICATION,
+            "message": SkillCategory.COMMUNICATION,
+            
+            # State management (refined - no bare "init")
+            "initialize": SkillCategory.MEMORY_SYSTEMS,
+            "init_state": SkillCategory.MEMORY_SYSTEMS,
+            "init_cache": SkillCategory.MEMORY_SYSTEMS,
+            "reset": SkillCategory.MEMORY_SYSTEMS,
+            "save": SkillCategory.MEMORY_SYSTEMS,
+            "load": SkillCategory.MEMORY_SYSTEMS,
+            "restore": SkillCategory.MEMORY_SYSTEMS,
+            "backup": SkillCategory.MEMORY_SYSTEMS,
+            "cache": SkillCategory.MEMORY_SYSTEMS,
+            "store": SkillCategory.MEMORY_SYSTEMS,
+            "persist": SkillCategory.MEMORY_SYSTEMS,
+            
+            # Processing
+            "parse": SkillCategory.CODE_PROCESSING,
+            "format": SkillCategory.DATA_TRANSFORMATION,
+            "transform": SkillCategory.DATA_TRANSFORMATION,
+            "convert": SkillCategory.DATA_TRANSFORMATION,
+            "validate": SkillCategory.ERROR_HANDLING,
+            
+            # Natural language
+            "chat": SkillCategory.NATURAL_LANGUAGE,
+            "respond": SkillCategory.NATURAL_LANGUAGE,
+            "reply": SkillCategory.NATURAL_LANGUAGE,
+            "conversation": SkillCategory.NATURAL_LANGUAGE,
+            
+            # Search and indexing
+            "search": SkillCategory.INDEXING_SYSTEMS,
+            "find": SkillCategory.INDEXING_SYSTEMS,
+            "query": SkillCategory.INDEXING_SYSTEMS,
+            "lookup": SkillCategory.INDEXING_SYSTEMS,
+            "index": SkillCategory.INDEXING_SYSTEMS,
+            "filter": SkillCategory.INDEXING_SYSTEMS,
+            "sort": SkillCategory.INDEXING_SYSTEMS,
+            
+            # CLI operations
+            "execute": SkillCategory.CLI_OPERATIONS,
+            "run": SkillCategory.CLI_OPERATIONS,
+            "invoke": SkillCategory.CLI_OPERATIONS,
+            "command": SkillCategory.CLI_OPERATIONS,
+            "spawn": SkillCategory.CLI_OPERATIONS
+        }
+    
     def detect_skills_in_file(self, content: str, file_path: str) -> List[SkillSignature]:
-        """Detect skills in a file."""
+        """Detect skills in a file with enhanced pattern matching."""
         ext = Path(file_path).suffix.lower()
         
         if ext == '.py':
@@ -146,7 +360,7 @@ class AdvancedSkillDetector:
         return []
     
     def _detect_python_skills(self, content: str, file_path: str) -> List[SkillSignature]:
-        """Detect Python skills using AST."""
+        """Detect Python skills using enhanced AST analysis."""
         skills = []
         
         try:
@@ -154,23 +368,27 @@ class AdvancedSkillDetector:
             
             for node in ast.walk(tree):
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    skill = self._analyze_function(node, content, file_path)
+                    skill = self._analyze_function_enhanced(node, content, file_path)
                     if skill:
                         skills.append(skill)
         
         except SyntaxError:
-            # Fallback to regex
-            skills.extend(self._regex_detection(content, file_path))
+            # Fallback to regex with enhanced patterns
+            skills.extend(self._regex_detection_enhanced(content, file_path))
         
         return skills
     
-    def _analyze_function(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef], 
-                         content: str, file_path: str) -> Optional[SkillSignature]:
-        """Analyze Python function for skills."""
+    def _analyze_function_enhanced(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef], 
+                                 content: str, file_path: str) -> Optional[SkillSignature]:
+        """Enhanced function analysis with semantic patterns and filtering."""
         func_name = node.name
         
-        # Skip private functions
+        # Skip private functions but allow magic methods
         if func_name.startswith('_') and not func_name.startswith('__'):
+            return None
+        
+        # Skip obvious non-skills with refined filtering
+        if self._should_exclude_function(func_name, node):
             return None
         
         # Get function source
@@ -179,66 +397,223 @@ class AdvancedSkillDetector:
         except:
             func_source = ""
         
-        # Classify function
-        category, confidence = self._classify_function(func_name, func_source)
+        # Enhanced classification
+        category, confidence = self._classify_function_enhanced(func_name, func_source, node)
         
-        if confidence > 0.5:
+        # Higher threshold for skill detection (reduced false positives)
+        if confidence > 0.6:  # Increased from 0.4
             return SkillSignature(
                 name=func_name,
                 category=category,
                 confidence=confidence,
-                description=self._generate_description(func_name, category),
+                description=self._generate_description_enhanced(func_name, category),
                 file_path=file_path,
                 line_start=node.lineno,
                 line_end=getattr(node, 'end_lineno', node.lineno),
-                parameters=self._extract_parameters(node),
+                parameters=self._extract_parameters_enhanced(node),
                 dependencies=self._extract_dependencies(func_source),
-                complexity=self._assess_complexity(func_source),
+                complexity=self._assess_complexity_enhanced(func_source, node),
                 async_function=isinstance(node, ast.AsyncFunctionDef),
-                extraction_priority=self._calculate_extraction_priority(func_name, category, confidence, func_source)
+                extraction_priority=self._calculate_extraction_priority_enhanced(func_name, category, confidence, func_source)
             )
         
         return None
     
-    def _classify_function(self, func_name: str, func_source: str) -> Tuple[SkillCategory, float]:
-        """Classify function into skill category."""
+    def _should_exclude_function(self, func_name: str, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> bool:
+        """Exclude obvious non-skills to improve accuracy."""
+        
+        # Exclude simple constructors (unless they're complex)
+        if func_name == "__init__":
+            # Allow complex constructors with significant logic
+            line_count = (getattr(node, 'end_lineno', node.lineno) - node.lineno)
+            if line_count < 5:  # Simple constructors
+                return True
+            # Check if it's just basic assignment
+            # This is a simplified heuristic - could be improved with AST analysis
+            return False
+        
+        # Exclude common test setup methods (unless in test files we want to analyze)
+        if func_name in ["setUp", "tearDown", "setUpClass", "tearDownClass"]:
+            return True
+        
+        # Exclude property getters/setters without business logic
+        if func_name.startswith("get_") and len(node.args.args) <= 1:
+            # Simple getters are usually not interesting skills
+            line_count = (getattr(node, 'end_lineno', node.lineno) - node.lineno)
+            if line_count < 3:
+                return True
+        
+        # Exclude simple setters
+        if func_name.startswith("set_") and len(node.args.args) <= 2:
+            line_count = (getattr(node, 'end_lineno', node.lineno) - node.lineno)
+            if line_count < 3:
+                return True
+        
+        return False
+    
+    def _classify_function_enhanced(self, func_name: str, func_source: str, 
+                                  node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> Tuple[SkillCategory, float]:
+        """Enhanced function classification with multiple scoring methods."""
+        scores = {}
+        
+        # Method 1: Semantic pattern matching (highest priority)
+        semantic_score = self._score_semantic_patterns(func_name)
+        if semantic_score[1] > 0:
+            scores['semantic'] = semantic_score
+        
+        # Method 2: Enhanced keyword matching
+        keyword_score = self._score_keyword_patterns(func_name, func_source)
+        if keyword_score[1] > 0:
+            scores['keyword'] = keyword_score
+        
+        # Method 3: Function signature analysis
+        signature_score = self._score_function_signature(node)
+        if signature_score[1] > 0:
+            scores['signature'] = signature_score
+        
+        # Method 4: Import context analysis
+        import_score = self._score_import_context(func_source)
+        if import_score[1] > 0:
+            scores['import'] = import_score
+        
+        # Combine scores with weighted average
+        if not scores:
+            return SkillCategory.UTILITY_FUNCTIONS, 0.3
+        
+        # Weight the different scoring methods
+        weights = {
+            'semantic': 0.4,    # Highest weight for semantic patterns
+            'keyword': 0.3,     # Good weight for keyword matching
+            'signature': 0.2,   # Medium weight for function signature
+            'import': 0.1       # Lower weight for imports
+        }
+        
+        final_scores = {}
+        for category in SkillCategory:
+            total_score = 0.0
+            total_weight = 0.0
+            
+            for method, (cat, score) in scores.items():
+                if cat == category:
+                    weight = weights.get(method, 0.1)
+                    total_score += score * weight
+                    total_weight += weight
+            
+            if total_weight > 0:
+                final_scores[category] = total_score / total_weight
+        
+        if final_scores:
+            best_category = max(final_scores.items(), key=lambda x: x[1])
+            return best_category[0], min(best_category[1], 1.0)
+        
+        # Fallback
+        return SkillCategory.UTILITY_FUNCTIONS, 0.3
+    
+    def _score_semantic_patterns(self, func_name: str) -> Tuple[SkillCategory, float]:
+        """Score function based on semantic patterns with better precision."""
+        func_lower = func_name.lower()
+        
+        # Direct semantic matches with higher confidence
+        for pattern, category in self.semantic_patterns.items():
+            if pattern == func_lower:  # Exact match
+                return category, 0.95
+            elif func_lower == f"{pattern}_":  # With underscore suffix
+                return category, 0.9
+        
+        # Partial matches with context analysis
+        for pattern, category in self.semantic_patterns.items():
+            # Strong prefix/suffix matches
+            if func_lower.startswith(f"{pattern}_") or func_lower.endswith(f"_{pattern}"):
+                return category, 0.8
+            # Contains pattern (but not as simple substring to avoid false positives)
+            elif f"_{pattern}_" in func_lower or f"{pattern}_" in func_lower[:len(pattern)+1]:
+                return category, 0.7
+        
+        return SkillCategory.UTILITY_FUNCTIONS, 0.0
+    
+    def _score_keyword_patterns(self, func_name: str, func_source: str) -> Tuple[SkillCategory, float]:
+        """Score function based on enhanced keyword patterns."""
         best_category = SkillCategory.UTILITY_FUNCTIONS
-        best_confidence = 0.3
+        best_score = 0.0
         
         for category, patterns in self.patterns.items():
             score = 0.0
             
-            # Check keywords in name
-            name_matches = sum(1 for kw in patterns["keywords"] 
-                             if kw.lower() in func_name.lower())
-            score += (name_matches / len(patterns["keywords"])) * 0.4
+            # Enhanced name matching
+            name_matches = 0
+            for keyword in patterns["keywords"]:
+                if keyword.lower() in func_name.lower():
+                    name_matches += 1
             
-            # Check keywords in source
-            source_matches = sum(1 for kw in patterns["keywords"] 
-                               if kw.lower() in func_source.lower())
-            score += (source_matches / len(patterns["keywords"])) * 0.3
+            # Function pattern matching
+            pattern_matches = 0
+            for pattern in patterns.get("function_patterns", []):
+                if re.search(pattern, func_name, re.IGNORECASE):
+                    pattern_matches += 1
             
-            # Check imports
-            import_matches = sum(1 for imp in patterns["imports"] 
-                               if imp in func_source)
-            score += (import_matches / len(patterns["imports"])) * 0.3
+            # Source content matching (reduced weight)
+            source_matches = 0
+            for keyword in patterns["keywords"][:10]:  # Limit to avoid noise
+                if keyword.lower() in func_source.lower():
+                    source_matches += 1
             
-            final_score = score * patterns["confidence"]
+            # Calculate weighted score
+            name_weight = 0.5
+            pattern_weight = 0.3
+            source_weight = 0.2
             
-            if final_score > best_confidence:
+            total_keywords = len(patterns["keywords"])
+            total_patterns = len(patterns.get("function_patterns", []))
+            
+            if total_keywords > 0:
+                score += (name_matches / total_keywords) * name_weight
+            if total_patterns > 0:
+                score += (pattern_matches / total_patterns) * pattern_weight
+            if total_keywords > 0:
+                score += (source_matches / min(total_keywords, 10)) * source_weight
+            
+            # Apply base confidence
+            final_score = score * patterns.get("base_confidence", 0.5)
+            
+            if final_score > best_score:
                 best_category = category
-                best_confidence = final_score
+                best_score = final_score
         
-        return best_category, min(best_confidence, 1.0)
+        return best_category, min(best_score, 1.0)
     
-    def _extract_parameters(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> List[Dict[str, Any]]:
-        """Extract function parameters."""
+    def _score_function_signature(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> Tuple[SkillCategory, float]:
+        """Score function based on signature characteristics."""
+        # Async functions likely for I/O or API operations
+        if isinstance(node, ast.AsyncFunctionDef):
+            return SkillCategory.API_FRAMEWORKS, 0.6
+        
+        # Functions with many parameters might be configuration or utility
+        param_count = len(node.args.args)
+        if param_count > 5:
+            return SkillCategory.CONFIGURATION, 0.5
+        elif param_count == 0:
+            return SkillCategory.UTILITY_FUNCTIONS, 0.4
+        
+        return SkillCategory.UTILITY_FUNCTIONS, 0.0
+    
+    def _score_import_context(self, func_source: str) -> Tuple[SkillCategory, float]:
+        """Score function based on import context."""
+        for category, patterns in self.patterns.items():
+            for imp in patterns["imports"]:
+                if imp in func_source:
+                    return category, 0.7
+        
+        return SkillCategory.UTILITY_FUNCTIONS, 0.0
+    
+    def _extract_parameters_enhanced(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> List[Dict[str, Any]]:
+        """Enhanced parameter extraction."""
         params = []
         for arg in node.args.args:
-            params.append({
+            param_info = {
                 "name": arg.arg,
                 "type": self._get_type_hint(arg.annotation) if arg.annotation else None
-            })
+            }
+            params.append(param_info)
         return params
     
     def _get_type_hint(self, annotation: ast.expr) -> str:
@@ -247,23 +622,82 @@ class AdvancedSkillDetector:
             return annotation.id
         elif isinstance(annotation, ast.Attribute):
             try:
-                # Try to get the full qualified name
                 if hasattr(annotation.value, 'id'):
-                    return f"{annotation.value.id}.{annotation.attr}"  # type: ignore
+                    return f"{annotation.value.id}.{annotation.attr}"
                 else:
                     return annotation.attr
             except AttributeError:
                 return annotation.attr
         return "Any"
     
+    def _assess_complexity_enhanced(self, func_source: str, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> str:
+        """Enhanced complexity assessment."""
+        # Count control flow statements
+        control_flow = (
+            func_source.count('if ') + func_source.count('elif ') + 
+            func_source.count('for ') + func_source.count('while ') +
+            func_source.count('try:') + func_source.count('except ')
+        )
+        
+        # Count function calls (approximation)
+        function_calls = func_source.count('(') - func_source.count('def ')
+        
+        # Count lines of code (excluding empty lines and comments)
+        lines = [line.strip() for line in func_source.split('\n') 
+                if line.strip() and not line.strip().startswith('#')]
+        loc = len(lines)
+        
+        # Complexity scoring
+        complexity_score = control_flow * 2 + function_calls * 0.5 + loc * 0.1
+        
+        if complexity_score >= 20:
+            return "high"
+        elif complexity_score >= 10:
+            return "medium"
+        else:
+            return "low"
+    
+    def _calculate_extraction_priority_enhanced(self, func_name: str, category: SkillCategory, 
+                                              confidence: float, func_source: str) -> float:
+        """Enhanced extraction priority calculation."""
+        base_priority = confidence
+        
+        # Boost priority for high-value categories
+        category_boosts = {
+            SkillCategory.MCP_INTEGRATION: 0.3,
+            SkillCategory.API_FRAMEWORKS: 0.2,
+            SkillCategory.NATURAL_LANGUAGE: 0.2,
+            SkillCategory.COMMUNICATION: 0.25,
+            SkillCategory.MEMORY_SYSTEMS: 0.15,
+            SkillCategory.CLI_OPERATIONS: 0.1
+        }
+        
+        priority = base_priority + category_boosts.get(category, 0.0)
+        
+        # Boost for async functions (usually more valuable)
+        if 'async ' in func_source:
+            priority += 0.1
+        
+        # Boost for well-documented functions
+        if '"""' in func_source or "'''" in func_source:
+            priority += 0.05
+        
+        # Boost for functions with type hints
+        if '->' in func_source:
+            priority += 0.05
+        
+        return min(priority, 1.0)
+    
     def _extract_dependencies(self, func_source: str) -> List[str]:
         """Extract function dependencies."""
         deps = []
         
-        # Simple import detection
+        # Enhanced import detection
         import_patterns = [
             r'import\s+(\w+)',
-            r'from\s+(\w+)\s+import'
+            r'from\s+(\w+)\s+import',
+            r'require\([\'"]([^\'"]+)[\'"]\)',  # JavaScript require
+            r'import.*from\s+[\'"]([^\'"]+)[\'"]'  # ES6 imports
         ]
         
         for pattern in import_patterns:
@@ -272,217 +706,284 @@ class AdvancedSkillDetector:
         
         return list(set(deps))
     
-    def _assess_complexity(self, func_source: str) -> str:
-        """Assess function complexity."""
-        complexity_indicators = func_source.count('if') + func_source.count('for') + func_source.count('while')
-        
-        if complexity_indicators >= 3:
-            return "high"
-        elif complexity_indicators >= 1:
-            return "medium"
-        else:
-            return "low"
-    
-    def _generate_description(self, func_name: str, category: SkillCategory) -> str:
-        """Generate skill description."""
+    def _generate_description_enhanced(self, func_name: str, category: SkillCategory) -> str:
+        """Generate enhanced skill descriptions."""
         templates = {
             # Core Performance Modules
-            SkillCategory.CLI_OPERATIONS: f"CLI operation: {func_name}",
-            SkillCategory.FILE_OPERATIONS: f"File operation: {func_name}",
-            SkillCategory.CODE_PROCESSING: f"Code processor: {func_name}",
-            SkillCategory.INDEXING_SYSTEMS: f"Indexing system: {func_name}",
-            SkillCategory.MEMORY_SYSTEMS: f"Memory system: {func_name}",
+            SkillCategory.CLI_OPERATIONS: f"Command-line operation: {func_name}",
+            SkillCategory.FILE_OPERATIONS: f"File system operation: {func_name}",
+            SkillCategory.CODE_PROCESSING: f"Code analysis/transformation: {func_name}",
+            SkillCategory.INDEXING_SYSTEMS: f"Search/indexing capability: {func_name}",
+            SkillCategory.MEMORY_SYSTEMS: f"State/memory management: {func_name}",
             
             # Advanced Capabilities
-            SkillCategory.NATURAL_LANGUAGE: f"NLP capability: {func_name}",
-            SkillCategory.PROMPT_ENGINEERING: f"Prompt engineer: {func_name}",
-            SkillCategory.MCP_INTEGRATION: f"MCP integration: {func_name}",
-            SkillCategory.API_FRAMEWORKS: f"API framework: {func_name}",
+            SkillCategory.NATURAL_LANGUAGE: f"Natural language processing: {func_name}",
+            SkillCategory.PROMPT_ENGINEERING: f"Prompt/template system: {func_name}",
+            SkillCategory.MCP_INTEGRATION: f"Model Context Protocol: {func_name}",
+            SkillCategory.API_FRAMEWORKS: f"API/HTTP operation: {func_name}",
             
-            # Legacy/Utility
-            SkillCategory.CONFIGURATION: f"Configuration: {func_name}",
-            SkillCategory.ERROR_HANDLING: f"Error handler: {func_name}",
-            SkillCategory.UTILITY_FUNCTIONS: f"Utility: {func_name}"
+            # Enhanced Categories
+            SkillCategory.COMMUNICATION: f"Communication system: {func_name}",
+            SkillCategory.AUTHENTICATION: f"Authentication/security: {func_name}",
+            SkillCategory.DATA_TRANSFORMATION: f"Data processing: {func_name}",
+            
+            # Utility Categories
+            SkillCategory.ERROR_HANDLING: f"Error handling: {func_name}",
+            SkillCategory.CONFIGURATION: f"Configuration management: {func_name}",
+            SkillCategory.UTILITY_FUNCTIONS: f"Utility function: {func_name}"
         }
+        
         return templates.get(category, f"Function: {func_name}")
     
     def _detect_js_skills(self, content: str, file_path: str) -> List[SkillSignature]:
-        """Detect JavaScript/TypeScript skills."""
+        """Detect JavaScript/TypeScript skills using enhanced regex patterns."""
         skills = []
         
-        # Function patterns
+        # Enhanced function detection patterns
         patterns = [
             r'function\s+(\w+)\s*\(',
-            r'const\s+(\w+)\s*=\s*\(',
-            r'(\w+)\s*:\s*function'
+            r'const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]*\)\s*=>\s*{|\([^)]*\)\s*=>)',
+            r'let\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]*\)\s*=>\s*{|\([^)]*\)\s*=>)',
+            r'var\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]*\)\s*=>\s*{|\([^)]*\)\s*=>)',
+            r'(\w+)\s*:\s*(?:async\s+)?function\s*\(',
+            r'(?:async\s+)?(\w+)\s*\([^)]*\)\s*{',  # Method definitions
+            r'export\s+(?:async\s+)?function\s+(\w+)\s*\(',
+            r'export\s+const\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]*\)\s*=>\s*{|\([^)]*\)\s*=>)'
         ]
         
         for pattern in patterns:
-            for match in re.finditer(pattern, content):
+            matches = re.finditer(pattern, content, re.MULTILINE)
+            for match in matches:
                 func_name = match.group(1)
+                if not func_name or func_name.startswith('_'):
+                    continue
+                
+                # Get line number
                 line_num = content[:match.start()].count('\n') + 1
                 
-                # Simple classification
-                category, confidence = self._classify_js_function(func_name, content)
+                # Get function context (try to get the whole function)
+                func_context = self._extract_js_function_context(content, match.start())
                 
-                if confidence > 0.5:
+                # Classify the function
+                category, confidence = self._classify_js_function(func_name, func_context)
+                
+                if confidence > 0.4:  # Lower threshold
                     skills.append(SkillSignature(
                         name=func_name,
                         category=category,
                         confidence=confidence,
-                        description=self._generate_description(func_name, category),
+                        description=self._generate_description_enhanced(func_name, category),
                         file_path=file_path,
                         line_start=line_num,
-                        line_end=line_num,
-                        extraction_priority=self._calculate_extraction_priority(func_name, category, confidence, content[max(0, match.start()-200):match.end()+200])
+                        line_end=line_num,  # Approximate
+                        parameters=[],  # Could be enhanced later
+                        dependencies=self._extract_js_dependencies(func_context),
+                        complexity=self._assess_js_complexity(func_context),
+                        async_function='async' in match.group(0),
+                        extraction_priority=self._calculate_extraction_priority_enhanced(func_name, category, confidence, func_context)
                     ))
         
         return skills
     
-    def _classify_js_function(self, func_name: str, content: str) -> Tuple[SkillCategory, float]:
-        """Classify JavaScript function using target skill categories."""
-        func_lower = func_name.lower()
+    def _extract_js_function_context(self, content: str, start_pos: int) -> str:
+        """Extract JavaScript function context for analysis."""
+        # Find the function block (simplified approach)
+        lines = content[start_pos:start_pos+2000].split('\n')  # Look at next ~2000 chars
+        context_lines = []
         
-        # Core Performance Modules
-        if any(kw in func_lower for kw in ['parse', 'ast', 'transform', 'compile', 'generate']):
-            return SkillCategory.CODE_PROCESSING, 0.9
-        elif any(kw in func_lower for kw in ['command', 'cli', 'args', 'terminal', 'process']):
-            return SkillCategory.CLI_OPERATIONS, 0.8
-        elif any(kw in func_lower for kw in ['search', 'index', 'categorize', 'metadata', 'extract']):
-            return SkillCategory.INDEXING_SYSTEMS, 0.8
-        elif any(kw in func_lower for kw in ['file', 'read', 'write', 'path', 'directory']):
-            return SkillCategory.FILE_OPERATIONS, 0.7
-        elif any(kw in func_lower for kw in ['cache', 'store', 'persist', 'memory', 'session']):
-            return SkillCategory.MEMORY_SYSTEMS, 0.8
+        brace_count = 0
+        in_function = False
         
-        # Advanced Capabilities
-        elif any(kw in func_lower for kw in ['mcp', 'protocol', 'server', 'client', 'resource']):
-            return SkillCategory.MCP_INTEGRATION, 0.9
-        elif any(kw in func_lower for kw in ['nlp', 'text', 'embedding', 'semantic', 'language']):
-            return SkillCategory.NATURAL_LANGUAGE, 0.8
-        elif any(kw in func_lower for kw in ['prompt', 'template', 'context', 'completion']):
-            return SkillCategory.PROMPT_ENGINEERING, 0.8
-        elif any(kw in func_lower for kw in ['api', 'fetch', 'request', 'http', 'endpoint']):
+        for line in lines:
+            context_lines.append(line)
+            
+            for char in line:
+                if char == '{':
+                    brace_count += 1
+                    in_function = True
+                elif char == '}':
+                    brace_count -= 1
+                    
+            if in_function and brace_count == 0:
+                break
+                
+            if len(context_lines) > 50:  # Limit context size
+                break
+        
+        return '\n'.join(context_lines)
+    
+    def _classify_js_function(self, func_name: str, func_context: str) -> Tuple[SkillCategory, float]:
+        """Classify JavaScript function using enhanced patterns."""
+        # Use the same enhanced classification as Python
+        return self._classify_function_enhanced_js(func_name, func_context)
+    
+    def _classify_function_enhanced_js(self, func_name: str, func_source: str) -> Tuple[SkillCategory, float]:
+        """Enhanced JavaScript function classification."""
+        scores = {}
+        
+        # Method 1: Semantic pattern matching
+        semantic_score = self._score_semantic_patterns(func_name)
+        if semantic_score[1] > 0:
+            scores['semantic'] = semantic_score
+        
+        # Method 2: Enhanced keyword matching
+        keyword_score = self._score_keyword_patterns(func_name, func_source)
+        if keyword_score[1] > 0:
+            scores['keyword'] = keyword_score
+        
+        # Method 3: JavaScript-specific patterns
+        js_score = self._score_js_specific_patterns(func_name, func_source)
+        if js_score[1] > 0:
+            scores['js_specific'] = js_score
+        
+        # Combine scores
+        if not scores:
+            return SkillCategory.UTILITY_FUNCTIONS, 0.3
+        
+        weights = {
+            'semantic': 0.4,
+            'keyword': 0.4,
+            'js_specific': 0.2
+        }
+        
+        final_scores = {}
+        for category in SkillCategory:
+            total_score = 0.0
+            total_weight = 0.0
+            
+            for method, (cat, score) in scores.items():
+                if cat == category:
+                    weight = weights.get(method, 0.1)
+                    total_score += score * weight
+                    total_weight += weight
+            
+            if total_weight > 0:
+                final_scores[category] = total_score / total_weight
+        
+        if final_scores:
+            best_category = max(final_scores.items(), key=lambda x: x[1])
+            return best_category[0], min(best_category[1], 1.0)
+        
+        return SkillCategory.UTILITY_FUNCTIONS, 0.3
+    
+    def _score_js_specific_patterns(self, func_name: str, func_source: str) -> Tuple[SkillCategory, float]:
+        """Score JavaScript-specific patterns."""
+        # DOM manipulation
+        if any(term in func_source.lower() for term in ['document.', 'window.', 'element.', 'dom', 'jquery', '$(']):
+            return SkillCategory.UTILITY_FUNCTIONS, 0.6
+        
+        # Node.js file system
+        if any(term in func_source.lower() for term in ['fs.', 'path.', 'require(', '__dirname', '__filename']):
+            return SkillCategory.FILE_OPERATIONS, 0.8
+        
+        # Express/API patterns
+        if any(term in func_source.lower() for term in ['req.', 'res.', 'app.', 'router.', 'middleware']):
             return SkillCategory.API_FRAMEWORKS, 0.8
         
-        # Legacy/Utility
-        elif any(kw in func_lower for kw in ['config', 'settings', 'env']):
-            return SkillCategory.CONFIGURATION, 0.6
-        elif any(kw in func_lower for kw in ['error', 'exception', 'handle', 'validate']):
-            return SkillCategory.ERROR_HANDLING, 0.6
-        else:
-            return SkillCategory.UTILITY_FUNCTIONS, 0.4
+        # Async/Promise patterns
+        if any(term in func_source.lower() for term in ['await ', 'promise', '.then(', '.catch(', 'async']):
+            return SkillCategory.API_FRAMEWORKS, 0.6
+        
+        return SkillCategory.UTILITY_FUNCTIONS, 0.0
     
-    def _regex_detection(self, content: str, file_path: str) -> List[SkillSignature]:
-        """Fallback regex-based detection."""
+    def _extract_js_dependencies(self, func_context: str) -> List[str]:
+        """Extract JavaScript dependencies."""
+        deps = []
+        
+        # JavaScript import patterns
+        patterns = [
+            r'require\([\'"]([^\'"]+)[\'"]\)',
+            r'import.*from\s+[\'"]([^\'"]+)[\'"]',
+            r'import\s+[\'"]([^\'"]+)[\'"]'
+        ]
+        
+        for pattern in patterns:
+            matches = re.findall(pattern, func_context)
+            deps.extend(matches)
+        
+        return list(set(deps))
+    
+    def _assess_js_complexity(self, func_context: str) -> str:
+        """Assess JavaScript function complexity."""
+        # Count control flow and complexity indicators
+        complexity_indicators = (
+            func_context.count('if ') + func_context.count('for ') + 
+            func_context.count('while ') + func_context.count('switch ') +
+            func_context.count('try ') + func_context.count('catch ') +
+            func_context.count('?.') + func_context.count('&&') + func_context.count('||')
+        )
+        
+        # Count lines
+        lines = len([l for l in func_context.split('\n') if l.strip() and not l.strip().startswith('//')])
+        
+        if complexity_indicators >= 5 or lines >= 30:
+            return "high"
+        elif complexity_indicators >= 2 or lines >= 15:
+            return "medium"
+        else:
+            return "low"
+    
+    def _regex_detection_enhanced(self, content: str, file_path: str) -> List[SkillSignature]:
+        """Enhanced regex-based skill detection as fallback."""
         skills = []
         
-        # Simple function detection
-        for match in re.finditer(r'def\s+(\w+)\s*\(', content):
+        # Enhanced Python function detection
+        pattern = r'def\s+(\w+)\s*\([^)]*\):'
+        matches = re.finditer(pattern, content, re.MULTILINE)
+        
+        for match in matches:
             func_name = match.group(1)
-            if not func_name.startswith('_'):
-                line_num = content[:match.start()].count('\n') + 1
+            if func_name.startswith('_') and not func_name.startswith('__'):
+                continue
+            
+            line_num = content[:match.start()].count('\n') + 1
+            
+            # Get some context around the function
+            start = max(0, match.start() - 200)
+            end = min(len(content), match.end() + 1000)
+            context = content[start:end]
+            
+            # Classify using enhanced patterns
+            category, confidence = self._score_keyword_patterns(func_name, context)
+            
+            if confidence > 0.4:
                 skills.append(SkillSignature(
                     name=func_name,
-                    category=SkillCategory.UTILITY_FUNCTIONS,
-                    confidence=0.4,
-                    description=f"Function: {func_name}",
+                    category=category,
+                    confidence=confidence,
+                    description=self._generate_description_enhanced(func_name, category),
                     file_path=file_path,
                     line_start=line_num,
-                    line_end=line_num
+                    line_end=line_num,
+                    parameters=[],
+                    dependencies=self._extract_dependencies(context),
+                    complexity="medium",
+                    async_function=False,
+                    extraction_priority=confidence
                 ))
         
         return skills
     
-    def create_skill_module(self, skills: List[SkillSignature], file_path: str) -> SkillModule:
-        """Create skill module from multiple skills."""
-        if not skills:
-            # Return empty module for files with no detected skills
-            module_name = Path(file_path).stem
-            return SkillModule(
-                name=module_name,
-                primary_category=SkillCategory.UTILITY_FUNCTIONS,
-                skills=[],
-                file_path=file_path,
-                extraction_priority=0.0
-            )
+    def create_skill_module(self, skills: List[SkillSignature], file_path: str) -> Optional[SkillModule]:
+        """Create a skill module from multiple related skills."""
+        if len(skills) < 2:
+            return None
         
-        # Determine primary category
+        # Determine primary category based on most common category
         categories = [skill.category for skill in skills]
         primary_category = max(set(categories), key=categories.count)
         
-        # Calculate module priority
-        avg_priority = sum(skill.extraction_priority for skill in skills) / len(skills)
-        
-        module_name = Path(file_path).stem
+        # Generate module name from file path
+        module_name = Path(file_path).stem.replace('_', '-').replace('.', '-')
         
         return SkillModule(
             name=module_name,
             primary_category=primary_category,
             skills=skills,
             file_path=file_path,
-            extraction_priority=avg_priority
+            extraction_priority=sum(skill.extraction_priority for skill in skills) / len(skills)
         )
-    
-    def _calculate_extraction_priority(self, func_name: str, category: SkillCategory, 
-                                     confidence: float, func_source: str) -> float:
-        """Calculate sophisticated extraction priority based on multiple factors."""
-        base_priority = confidence
-        
-        # Category-based priority multipliers (aligned with PROJECT_PLAN.md targets)
-        category_multipliers = {
-            # Core Performance Modules (highest priority)
-            SkillCategory.CODE_PROCESSING: 1.5,  # AST parsing, syntax transformation, generation
-            SkillCategory.CLI_OPERATIONS: 1.4,   # Argument parsing, command execution, terminal I/O
-            SkillCategory.INDEXING_SYSTEMS: 1.4, # Search, categorization, metadata extraction
-            SkillCategory.FILE_OPERATIONS: 1.3,  # Read, write, delete, copy, move, watch
-            SkillCategory.MEMORY_SYSTEMS: 1.3,   # Caching, persistence, state management
-            
-            # Advanced Capabilities (high priority)
-            SkillCategory.MCP_INTEGRATION: 1.5,     # Model Context Protocol implementations
-            SkillCategory.NATURAL_LANGUAGE: 1.4,    # Text processing, embeddings, semantic search
-            SkillCategory.PROMPT_ENGINEERING: 1.3,  # Template systems, context management
-            SkillCategory.API_FRAMEWORKS: 1.2,      # HTTP clients, authentication, rate limiting
-            
-            # Legacy/Utility Categories (lower priority)
-            SkillCategory.CONFIGURATION: 1.0,
-            SkillCategory.ERROR_HANDLING: 1.0,
-            SkillCategory.UTILITY_FUNCTIONS: 0.8
-        }
-        
-        priority = base_priority * category_multipliers.get(category, 1.0)
-        
-        # High-value function name patterns
-        high_value_patterns = [
-            'api', 'client', 'service', 'manager', 'handler', 'processor',
-            'config', 'setup', 'init', 'create', 'build', 'parse', 'validate',
-            'authenticate', 'authorize', 'encrypt', 'decrypt', 'compress',
-            'transform', 'convert', 'export', 'import', 'sync', 'async'
-        ]
-        
-        name_lower = func_name.lower()
-        for pattern in high_value_patterns:
-            if pattern in name_lower:
-                priority *= 1.2
-                break
-        
-        # Complexity bonus (more complex = potentially more valuable)
-        if len(func_source) > 500:  # Large function
-            priority *= 1.1
-        elif len(func_source) > 200:  # Medium function
-            priority *= 1.05
-        
-        # Async function bonus
-        if 'async' in func_source or 'await' in func_source:
-            priority *= 1.1
-        
-        # Error handling bonus
-        if any(keyword in func_source for keyword in ['try', 'catch', 'except', 'error', 'throw']):
-            priority *= 1.05
-        
-        # Documentation bonus
-        if any(keyword in func_source for keyword in ['/**', '"""', 'docstring', '@param', '@return']):
-            priority *= 1.05
-        
-        # Cap at 1.0 and ensure minimum
-        return min(max(priority, 0.1), 1.0)
+
+
+# Maintain backward compatibility by aliasing the new class
+AdvancedSkillDetector = EnhancedSkillDetector
