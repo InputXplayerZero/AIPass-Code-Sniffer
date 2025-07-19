@@ -36,10 +36,10 @@ class EnhancedAnalyzer:
             with open(self.config_path, 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
-            print(f"⚠️ Config file not found: {self.config_path}")
+            print(f"[WARN] Config file not found: {self.config_path}")
             return self._get_default_config()
         except json.JSONDecodeError as e:
-            print(f"⚠️ Invalid JSON in config file: {e}")
+            print(f"[WARN] Invalid JSON in config file: {e}")
             return self._get_default_config()
     
     def _get_default_config(self) -> Dict[str, Any]:
@@ -88,7 +88,7 @@ class EnhancedAnalyzer:
         if language == 'unknown':
             return {"error": f"Unsupported file type: {file_path}"}
         
-        print(f"🔍 Analyzing {file_path} ({language}) at {analysis_level} level...")
+        print(f"[ANALYZE] Analyzing {file_path} ({language}) at {analysis_level} level...")
         
         try:
             if language in ['typescript', 'javascript']:
@@ -276,7 +276,7 @@ Python module with {len(imports)} imports detected.
             if skipped > 0:
                 print(f"⏭️ Skipping {skipped} already analyzed files (incremental mode)")
         
-        print(f"📁 Found {len(files_to_analyze)} files to analyze...")
+        print(f"[SCAN] Found {len(files_to_analyze)} files to analyze...")
         
         # Initialize tracking
         results = []
@@ -301,7 +301,7 @@ Python module with {len(imports)} imports detected.
             else:
                 eta_str = ""
             
-            print(f"🔄 [{i}/{len(files_to_analyze)}] ({progress:.1f}%){eta_str} - {os.path.basename(file_path)}")
+            print(f"[PROGRESS] [{i}/{len(files_to_analyze)}] ({progress:.1f}%){eta_str} - {os.path.basename(file_path)}")
             
             result = await self.analyze_file(file_path, analysis_level, output_dir)
             results.append(result)
@@ -314,15 +314,15 @@ Python module with {len(imports)} imports detected.
             # Print result
             if "error" not in result:
                 quality_str = f" | Quality: {result.get('quality_score', 'N/A')}/10" if result.get('quality_score') else ""
-                print(f"✅ {os.path.basename(file_path)} - {result.get('language', 'unknown')}{quality_str}")
+                print(f"[OK] {os.path.basename(file_path)} - {result.get('language', 'unknown')}{quality_str}")
             else:
-                print(f"❌ {os.path.basename(file_path)} - {result['error']}")
+                print(f"[ERROR] {os.path.basename(file_path)} - {result['error']}")
         
         # Print final token usage summary
         if total_tokens > 0:
-            print(f"\n💰 Token Usage Summary:")
-            print(f"📊 Total tokens used: {total_tokens:,}")
-            print(f"💵 Estimated cost: ${total_cost:.4f}")
+            print(f"[COST] Token Usage Summary:")
+            print(f"[TOKENS] Total tokens used: {total_tokens:,}")
+            print(f"[COST] Estimated cost: ${total_cost:.4f}")
             print(f"📈 Average per file: {total_tokens/len(results):,.0f} tokens")
         
         # Update abilities index
@@ -422,11 +422,11 @@ async def analyze_command(args):
                 print("📋 Basic analysis completed")
                 print("💡 Add AI API keys for enhanced semantic analysis")
         
-        print("\n✅ Analysis completed successfully!")
+        print("\n[COMPLETE] Analysis completed successfully!")
         return 0
         
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"[ERROR] Unexpected error: {e}")
         return 1
 
 
