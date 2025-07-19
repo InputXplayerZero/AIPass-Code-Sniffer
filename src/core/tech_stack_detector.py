@@ -170,10 +170,11 @@ def detect_tech_stack(project_path):
             add_unique("frameworks", ".NET")
 
     # Convert sets to sorted lists for consistent output
+    result = {}
     for key in tech_stack:
-        tech_stack[key] = sorted(list(tech_stack[key]))
+        result[key] = sorted(list(tech_stack[key]))
     
-    return tech_stack
+    return result
 
 if __name__ == "__main__":
     import argparse

@@ -8,9 +8,9 @@ business context, architectural patterns, and code quality.
 import os
 import ast
 import json
-import asyncio
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, asdict
+import re
+from typing import Dict, List, Any, Optional
+from dataclasses import dataclass, field, asdict
 
 # Import our AI services
 import sys
@@ -35,7 +35,7 @@ class EnhancedPythonAnalysis:
     
     # Metadata
     analysis_level: str = "basic"
-    frameworks_detected: List[str] = None
+    frameworks_detected: List[str] = field(default_factory=list)
     complexity: str = "unknown"
 
 
@@ -43,16 +43,36 @@ class EnhancedPythonAnalyzer:
     """AI-enhanced Python code analyzer."""
     
     def __init__(self):
-        # Load AI configuration
+        # Load AI configuration with proper API key handling
         config_path = os.path.join(
             os.path.dirname(__file__), '..', '..', '..', 'config', 'ai_config.json'
         )
+        
+        # Create working config with environment variables
+        config = {
+            "openai": {
+                "api_key": os.getenv("OPENAI_API_KEY"),
+                "models": {
+                    "summarization": "gpt-4o-mini",
+                    "analysis": "gpt-4"
+                },
+                "enabled": True
+            }
+        }
+        
+        # Try to load additional config from file
         try:
             with open(config_path, 'r') as f:
-                config = json.load(f)
-        except Exception:
-            config = {}  # Use empty config if file not found
+                file_config = json.load(f)
+                # Merge file config but keep our environment-based API key
+                if "openai" in file_config:
+                    config["openai"].update(file_config["openai"])
+                    # Ensure we use environment API key
+                    config["openai"]["api_key"] = os.getenv("OPENAI_API_KEY")
+        except Exception as e:
+            print(f"⚠️  Could not load config file: {e}")
         
+        print(f"🔧 Initializing AI services with config: {bool(config.get('openai', {}).get('api_key'))}")
         self.ai_manager = AIServiceManager(config)
     
     def parse_python_ast(self, file_path: str) -> Dict[str, Any]:
@@ -204,7 +224,8 @@ class EnhancedPythonAnalyzer:
                 functions=[],
                 classes=[],
                 imports=[],
-                analysis_level="error"
+                analysis_level="error",
+                frameworks_detected=[]
             )
         
         # Detect frameworks and complexity
@@ -218,40 +239,52 @@ class EnhancedPythonAnalyzer:
             classes=ast_data['classes'],
             imports=ast_data['imports'],
             analysis_level=analysis_level,
-            frameworks_detected=frameworks,
+            frameworks_detected=frameworks or [],
             complexity=complexity
         )
         
         # Add AI enhancement if requested
-        if analysis_level in ["enhanced", "premium"] and self.ai_manager.has_services():
-            try:
-                # Generate AI summary
-                analysis.ai_summary = await self.ai_manager.generate_summary(
-                    code_content=ast_data['content'],
-                    language="python",
-                    file_path=file_path
-                )
-                
-                if analysis_level == "premium":
-                    # Full AI analysis
-                    analysis.semantic_analysis = await self.ai_manager.analyze_semantics(
+        if analysis_level in ["enhanced", "premium"]:
+            print(f"🤖 Attempting AI analysis for {analysis_level} level...")
+            print(f"🔑 AI services available: {self.ai_manager.has_services()}")
+            
+            if self.ai_manager.has_services():
+                try:
+                    print("🔄 Generating AI summary...")
+                    # Generate AI summary
+                    analysis.ai_summary = await self.ai_manager.generate_summary(
                         code_content=ast_data['content'],
-                        language="python"
+                        language="python",
+                        file_path=file_path
                     )
+                    print("✅ AI summary generated successfully")
                     
-                    analysis.pattern_analysis = await self.ai_manager.detect_patterns(
-                        code_content=ast_data['content'],
-                        language="python"
-                    )
-                    
-                    analysis.quality_assessment = await self.ai_manager.assess_quality(
-                        code_content=ast_data['content'],
-                        language="python"
-                    )
-                    
-            except Exception as e:
-                print(f"⚠️  AI analysis failed: {str(e)}")
-                # Continue with basic analysis
+                    if analysis_level == "premium":
+                        print("🔄 Running full AI analysis...")
+                        # Full AI analysis
+                        analysis.semantic_analysis = await self.ai_manager.analyze_semantics(
+                            code_content=ast_data['content'],
+                            language="python"
+                        )
+                        
+                        analysis.pattern_analysis = await self.ai_manager.detect_patterns(
+                            code_content=ast_data['content'],
+                            language="python"
+                        )
+                        
+                        analysis.quality_assessment = await self.ai_manager.assess_quality(
+                            code_content=ast_data['content'],
+                            language="python"
+                        )
+                        print("✅ Full AI analysis completed")
+                        
+                except Exception as e:
+                    print(f"⚠️  AI analysis failed: {str(e)}")
+                    import traceback
+                    traceback.print_exc()
+                    # Continue with basic analysis
+            else:
+                print("❌ No AI services available - check API keys")
         
         return analysis
     
@@ -287,6 +320,7 @@ class EnhancedPythonAnalyzer:
         # Start with header
         content = f"# {'Enhanced ' if analysis.ai_summary else ''}Ability Card: {file_name}\n\n"
         content += f"**File:** `{analysis.file_path}`  \n"
+        content += f"**Full Path:** `{os.path.abspath(analysis.file_path)}`  \n"
         content += f"**Language:** Python  \n"
         content += f"**Analysis Level:** {'Enhanced with AI' if analysis.ai_summary else 'Basic'}\n\n"
         
@@ -314,10 +348,10 @@ class EnhancedPythonAnalyzer:
         # Business context (if available)
         if analysis.semantic_analysis:
             content += "\n## Business Context\n\n"
-            content += f"- **Domain:** {analysis.semantic_analysis.domain}\n"
-            content += f"- **Purpose:** {analysis.semantic_analysis.purpose}\n"
-            content += f"- **User Interaction:** {analysis.semantic_analysis.user_interaction}\n"
-            content += f"- **Safety Level:** {analysis.semantic_analysis.safety_level}\n\n"
+            content += f"- **Domain:** {analysis.semantic_analysis.domain_type}\n"
+            content += f"- **Business Context:** {analysis.semantic_analysis.business_context}\n"
+            content += f"- **Architectural Pattern:** {analysis.semantic_analysis.architectural_pattern}\n"
+            content += f"- **Quality Score:** {analysis.semantic_analysis.quality_score}/10\n\n"
         
         # Patterns (if available)
         if analysis.pattern_analysis:

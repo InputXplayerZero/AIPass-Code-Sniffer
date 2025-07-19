@@ -125,11 +125,11 @@ class OpenAIService(AIService):
         """
         
         try:
+            # Remove json_object format for gpt-4o-mini compatibility
             response = self.client.chat.completions.create(
                 model=self.analysis_model,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
-                response_format={"type": "json_object"}
+                temperature=0.1
             )
             
             result = json.loads(response.choices[0].message.content)
@@ -172,11 +172,11 @@ class OpenAIService(AIService):
         """
         
         try:
+            # Remove json_object format for gpt-4o-mini compatibility
             response = self.client.chat.completions.create(
                 model=self.analysis_model,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
-                response_format={"type": "json_object"}
+                temperature=0.1
             )
             
             result = json.loads(response.choices[0].message.content)
@@ -222,11 +222,11 @@ class OpenAIService(AIService):
         """
         
         try:
+            # Remove json_object format for gpt-4o-mini compatibility
             response = self.client.chat.completions.create(
                 model=self.analysis_model,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
-                response_format={"type": "json_object"}
+                temperature=0.1
             )
             
             result = json.loads(response.choices[0].message.content)
