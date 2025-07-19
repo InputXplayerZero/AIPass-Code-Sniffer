@@ -1,9 +1,8 @@
-
-
 import os
 import sys
 import ast
-
+import subprocess
+import json
 
 def analyze_python_dependencies(file_path):
     """
@@ -43,14 +42,6 @@ def analyze_python_dependencies(file_path):
 
     dependencies['imports'] = sorted(list(dependencies['imports']))
     return dependencies
-
-
-
-
-
-
-import subprocess
-import json
 
 def analyze_typescript_dependencies(file_path):
     """
@@ -123,11 +114,11 @@ def format_as_dot(analysis_results, project_root):
         module_name = os.path.splitext(rel_path)[0].replace(os.path.sep, '.')
         local_modules.add(module_name)
 
-    dot_string = '''digraph dependencies {
+    dot_string = f"""digraph dependencies {{
     rankdir=LR;
     node [shape=box, style="rounded,filled", fillcolor=lightgrey];
     graph [splines=ortho];
-'''
+"""
 
     all_nodes = set()
     for result in analysis_results:
@@ -140,18 +131,18 @@ def format_as_dot(analysis_results, project_root):
 
     for node in sorted(list(all_nodes)):
         if node in local_modules:
-            dot_string += f'    "{node}";\n'
+            dot_string += f"    \"{node}\";\n"
         else:
-            dot_string += f'    "{node}" [fillcolor=lightblue];\n'
+            dot_string += f"    \"{node}\" [fillcolor=lightblue];\n"
 
     for result in analysis_results:
         if 'error' in result:
             continue
         file_module_name = os.path.splitext(os.path.relpath(os.path.abspath(result['file_path']), project_root_abs))[0].replace(os.path.sep, '.')
         for imp in result['imports']:
-            dot_string += f'    "{file_module_name}" -> "{imp}";\n'
+            dot_string += f"    \"{file_module_name}\" -> \"{imp}\";\n"
 
-    dot_string += '}'
+    dot_string += "}"
     return dot_string
 
 if __name__ == '__main__':
@@ -184,5 +175,3 @@ if __name__ == '__main__':
 
     dot_output = format_as_dot(valid_results, target_path)
     print(dot_output)
-
-

@@ -48,7 +48,6 @@ digraph dependencies {
     graph [splines=ortho];
     "parse-apply-patch";
 }
-}
 ```
 
 ---

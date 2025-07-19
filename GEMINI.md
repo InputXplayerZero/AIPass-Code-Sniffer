@@ -21,7 +21,7 @@ This document outlines the specific instructions, objectives, and operational gu
 
 *   **Iterative Learning & Adaptation:** This project is a learning process. The agent should continuously learn from manual dissection, identify areas for automation, and propose improvements to its own workflow and tools. Feedback will be frequent.
 *   **Functional Indexing Focus:** Prioritize the identification and detailed documentation of "abilities" or "functional modules" within codebases, as defined in the `RESEARCH_PLAN.md`.
-*   **AIPass-Code-Sniffer Development:** Actively contribute to the development of automated tools (as outlined in `TOOL_IDEAS.md`) that will form the "AIPass-Code-Sniffer."
+*   **AIPass-Code-Sniffer Development:** Actively contribute to the development of automated tools (as outlined in `TOOL_IDEAS.md`) that will form the "AIPass-Code-Sniffer." Note: Automated TypeScript/JavaScript analysis is an ongoing challenge and currently has limitations.
 *   **Clarity & Precision:** All outputs, summaries, and code modifications must be clear, precise, and well-documented.
 *   **Safety First:** Adhere strictly to safety protocols, especially when executing shell commands or modifying files. Always explain critical commands before execution.
 *   **Proactive Problem Solving:** If a task encounters an issue, attempt to diagnose and propose a solution. Do not simply report failure without context.
