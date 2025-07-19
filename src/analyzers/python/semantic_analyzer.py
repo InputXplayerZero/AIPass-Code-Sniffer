@@ -43,7 +43,17 @@ class EnhancedPythonAnalyzer:
     """AI-enhanced Python code analyzer."""
     
     def __init__(self):
-        self.ai_manager = AIServiceManager()
+        # Load AI configuration
+        config_path = os.path.join(
+            os.path.dirname(__file__), '..', '..', '..', 'config', 'ai_config.json'
+        )
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+        except Exception:
+            config = {}  # Use empty config if file not found
+        
+        self.ai_manager = AIServiceManager(config)
     
     def parse_python_ast(self, file_path: str) -> Dict[str, Any]:
         """Parse Python file using AST to extract basic information."""

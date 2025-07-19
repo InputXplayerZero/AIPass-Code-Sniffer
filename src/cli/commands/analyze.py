@@ -13,7 +13,8 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
-from analyzers.typescript.semantic_analyzer import analyze_typescript_file_enhanced
+from analyzers.typescript.semantic_analyzer import analyze_typescript_file_enhanced, EnhancedTypeScriptAnalyzer
+from analyzers.python.semantic_analyzer import EnhancedPythonAnalyzer
 from core.dependency_visualizer import analyze_python_dependencies, analyze_typescript_dependencies
 from utils.index_updater import update_abilities_index
 
@@ -118,28 +119,23 @@ class EnhancedAnalyzer:
                 }
             
             elif language == 'python':
-                # Use basic Python analyzer for now
-                analysis = analyze_python_dependencies(file_path)
+                # Use enhanced Python analyzer
+                python_analyzer = EnhancedPythonAnalyzer()
+                analysis = await python_analyzer.analyze_file(file_path, analysis_level)
                 
-                # Generate basic ability card
-                card_content = self._generate_basic_ability_card(file_path, analysis, language)
-                
-                # Save ability card
-                os.makedirs(output_dir, exist_ok=True)
-                file_name = os.path.basename(file_path)
-                card_name = f"AbilityCard_{file_name.replace('.', '_')}.md"
-                card_path = os.path.join(output_dir, card_name)
-                
-                with open(card_path, 'w', encoding='utf-8') as f:
-                    f.write(card_content)
+                # Generate ability card
+                card_path = python_analyzer.generate_ability_card(analysis, output_dir)
                 
                 return {
                     "file_path": file_path,
                     "language": language,
-                    "analysis_level": "basic",
+                    "analysis_level": analysis_level,
                     "ability_card": card_path,
-                    "imports": len(analysis.get("imports", [])),
-                    "ai_enhanced": False
+                    "functions": len(analysis.functions),
+                    "classes": len(analysis.classes),
+                    "imports": len(analysis.imports),
+                    "ai_enhanced": bool(analysis.semantic_analysis or analysis.ai_summary),
+                    "quality_score": analysis.quality_assessment.overall_score if analysis.quality_assessment else None
                 }
             
             else:

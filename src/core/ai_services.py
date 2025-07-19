@@ -365,6 +365,26 @@ class AIServiceManager:
         
         return None
     
+    def has_services(self) -> bool:
+        """Check if any AI services are available."""
+        return len(self.services) > 0
+    
+    async def generate_summary(self, code_content: str, language: str, file_path: str) -> str:
+        """Generate AI summary for code."""
+        return await self.analyze_with_ai(code_content, file_path, language, "summary")
+    
+    async def analyze_semantics(self, code_content: str, language: str) -> SemanticAnalysis:
+        """Analyze semantic meaning of code."""
+        return await self.analyze_with_ai(code_content, "", language, "semantic")
+    
+    async def detect_patterns(self, code_content: str, language: str) -> PatternAnalysis:
+        """Detect patterns in code."""
+        return await self.analyze_with_ai(code_content, "", language, "patterns")
+    
+    async def assess_quality(self, code_content: str, language: str) -> QualityAssessment:
+        """Assess code quality."""
+        return await self.analyze_with_ai(code_content, "", language, "quality")
+    
     async def analyze_with_ai(self, code: str, file_path: str, language: str, 
                              analysis_type: str = "semantic") -> Union[SemanticAnalysis, PatternAnalysis, QualityAssessment, str]:
         """Perform AI analysis with automatic service selection."""
