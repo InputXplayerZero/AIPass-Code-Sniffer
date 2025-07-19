@@ -120,6 +120,17 @@ def main():
         help='Directory containing ability cards (default: ./output/ability_cards)'
     )
     
+    # Cleanup command
+    cleanup_parser = subparsers.add_parser(
+        'cleanup',
+        help='Clean all output directories and files'
+    )
+    cleanup_parser.add_argument(
+        '--confirm', '-y',
+        action='store_true',
+        help='Skip confirmation prompt'
+    )
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -172,10 +183,33 @@ def main():
             print("   Use 'analyze' command for comprehensive analysis including dependencies")
             
         elif args.command == 'index':
-            print(f"Updating abilities index from: {args.analysis_dir}")
-            update_abilities_index(args.analysis_dir)
+            print(f"Updating abilities index from: {args.directory}")
+            update_abilities_index(args.directory)
             print("[+] Index updated successfully!")
             return 0
+            
+        elif args.command == 'cleanup':
+            # Run cleanup script
+            import subprocess
+            import sys
+            from pathlib import Path
+            
+            if not args.confirm:
+                response = input("Are you sure you want to delete all output files? (y/N): ")
+                if response.lower() not in ['y', 'yes']:
+                    print("Cleanup cancelled.")
+                    return 0
+            
+            cleanup_script = Path(__file__).parent.parent.parent / "cleanup_outputs.py"
+            if cleanup_script.exists():
+                result = subprocess.run([sys.executable, str(cleanup_script)], capture_output=True, text=True)
+                print(result.stdout)
+                if result.stderr:
+                    print("Errors:", result.stderr)
+                return result.returncode
+            else:
+                print("Error: cleanup_outputs.py not found")
+                return 1
         
     except Exception as e:
         print(f"[!] Error: {e}")
