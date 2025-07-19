@@ -184,11 +184,58 @@ Python module with {len(imports)} imports detected.
         supported_extensions = set(self.get_supported_extensions().keys())
         files_to_analyze = []
         
-        # Find all supported files
+        # Define ignore patterns for configuration and build files
+        ignore_dirs = {
+            '.git', '.github', '.vscode', '.idea', 
+            'node_modules', 'dist', 'build', 'coverage',
+            '__pycache__', '.pytest_cache', '.mypy_cache',
+            'venv', '.venv', 'env', '.env',
+            '.husky', '.devcontainer', 'patches'
+        }
+        
+        ignore_patterns = {
+            # Configuration files
+            'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock',
+            'tsconfig.json', 'jsconfig.json', 'webpack.config.js',
+            'rollup.config.js', 'vite.config.js', 'vitest.config.js',
+            'jest.config.js', 'babel.config.js', 'eslint.config.js',
+            '.prettierrc', '.eslintrc', '.gitignore', '.gitattributes',
+            'requirements.txt', 'setup.py', 'pyproject.toml',
+            # Build and deployment
+            'Dockerfile', 'docker-compose.yml', 'Makefile',
+            'flake.nix', 'flake.lock', 'cliff.toml',
+            # Documentation (unless specifically analyzing docs)
+            'README.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE'
+        }
+        
+        def should_ignore_file(file_path: str) -> bool:
+            """Check if file should be ignored based on patterns."""
+            file_name = os.path.basename(file_path)
+            
+            # Skip configuration files
+            if file_name in ignore_patterns:
+                return True
+                
+            # Skip test files (optional - comment out if you want to analyze tests)
+            if '.test.' in file_name or '.spec.' in file_name:
+                return True
+                
+            # Skip type definition files
+            if file_name.endswith('.d.ts'):
+                return True
+                
+            return False
+        
+        # Find all supported files with ignore filtering
         for root, dirs, files in os.walk(dir_path):
+            # Remove ignored directories from traversal
+            dirs[:] = [d for d in dirs if d not in ignore_dirs]
+            
             for file in files:
                 if any(file.endswith(ext) for ext in supported_extensions):
-                    files_to_analyze.append(os.path.join(root, file))
+                    file_path = os.path.join(root, file)
+                    if not should_ignore_file(file_path):
+                        files_to_analyze.append(file_path)
         
         if not files_to_analyze:
             return {"error": "No supported files found in directory"}

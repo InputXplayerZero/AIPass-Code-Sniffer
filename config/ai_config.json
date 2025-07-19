@@ -3,7 +3,7 @@
     "openai": {
       "api_key": "${OPENAI_API_KEY}",
       "models": {
-        "summarization": "gpt-4o-mini",
+        "summarization": "gpt-4.1-nano",
         "analysis": "gpt-4"
       },
       "enabled": true
