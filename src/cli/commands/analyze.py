@@ -6,17 +6,19 @@ import os
 import sys
 import json
 import asyncio
-from typing import Optional, Dict, Any
+import time
 from datetime import datetime
+from typing import Dict, Any, List, Optional
 from pathlib import Path
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
-from analyzers.typescript.semantic_analyzer import analyze_typescript_file_enhanced, EnhancedTypeScriptAnalyzer
-from analyzers.python.semantic_analyzer import EnhancedPythonAnalyzer
+from analyzers.python import EnhancedPythonAnalyzer
+from analyzers.typescript.semantic_analyzer import EnhancedTypeScriptAnalyzer, analyze_typescript_file_enhanced
 from core.dependency_visualizer import analyze_python_dependencies, analyze_typescript_dependencies
 from utils.index_updater import update_abilities_index
+from core.skill_analyzer import SkillAnalyzer
 
 
 class EnhancedAnalyzer:
@@ -144,6 +146,12 @@ class EnhancedAnalyzer:
         except Exception as e:
             return {"error": f"Analysis failed: {str(e)}"}
     
+    def _has_existing_card(self, file_path: str, existing_cards: set) -> bool:
+        """Check if an ability card already exists for this file."""
+        file_name = os.path.basename(file_path)
+        card_name = f"Enhanced_AbilityCard_{file_name.replace('.', '_')}.md"
+        return card_name in existing_cards
+    
     def _generate_basic_ability_card(self, file_path: str, analysis: Dict[str, Any], language: str) -> str:
         """Generate a basic ability card for non-AI analysis."""
         file_name = os.path.basename(file_path)
@@ -176,7 +184,8 @@ Python module with {len(imports)} imports detected.
 """
     
     async def analyze_directory(self, dir_path: str, analysis_level: str = "enhanced",
-                               output_dir: str = "./output/ability_cards") -> Dict[str, Any]:
+                               output_dir: str = "./output/ability_cards", budget: Optional[int] = None,
+                               sample: Optional[str] = None, incremental: bool = False) -> Dict[str, Any]:
         """Analyze all supported files in a directory."""
         if not os.path.exists(dir_path):
             return {"error": f"Directory not found: {dir_path}"}
@@ -240,18 +249,81 @@ Python module with {len(imports)} imports detected.
         if not files_to_analyze:
             return {"error": "No supported files found in directory"}
         
+        # Apply sampling if specified
+        if sample:
+            import random
+            if sample.endswith('%'):
+                sample_pct = float(sample[:-1]) / 100
+            else:
+                sample_pct = float(sample) / 100
+            
+            sample_size = max(1, int(len(files_to_analyze) * sample_pct))
+            files_to_analyze = random.sample(files_to_analyze, sample_size)
+            print(f"🎯 Sampling {sample_size} files ({sample}) from {len(files_to_analyze)} total")
+        
+        # Apply incremental filtering if specified
+        if incremental:
+            existing_cards = set()
+            if os.path.exists(output_dir):
+                for root, dirs, files in os.walk(output_dir):
+                    for file in files:
+                        if file.endswith('.md'):
+                            existing_cards.add(file)
+            
+            original_count = len(files_to_analyze)
+            files_to_analyze = [f for f in files_to_analyze if not self._has_existing_card(f, existing_cards)]
+            skipped = original_count - len(files_to_analyze)
+            if skipped > 0:
+                print(f"⏭️ Skipping {skipped} already analyzed files (incremental mode)")
+        
         print(f"📁 Found {len(files_to_analyze)} files to analyze...")
         
+        # Initialize tracking
         results = []
-        for file_path in files_to_analyze:
+        total_tokens = 0
+        total_cost = 0.0
+        start_time = time.time()
+        
+        for i, file_path in enumerate(files_to_analyze, 1):
+            # Check budget before processing
+            if budget and total_tokens >= budget:
+                print(f"💰 Budget limit reached ({budget} tokens). Stopping analysis.")
+                break
+                
+            # Progress indicator
+            progress = (i / len(files_to_analyze)) * 100
+            elapsed = time.time() - start_time
+            if i > 1:
+                avg_time = elapsed / (i - 1)
+                remaining_files = len(files_to_analyze) - i + 1
+                eta_seconds = avg_time * remaining_files
+                eta_str = f" | ETA: {eta_seconds/60:.1f}m" if eta_seconds > 60 else f" | ETA: {eta_seconds:.0f}s"
+            else:
+                eta_str = ""
+            
+            print(f"🔄 [{i}/{len(files_to_analyze)}] ({progress:.1f}%){eta_str} - {os.path.basename(file_path)}")
+            
             result = await self.analyze_file(file_path, analysis_level, output_dir)
             results.append(result)
             
-            # Print progress
+            # Track tokens and cost if available
+            if "tokens_used" in result:
+                total_tokens += result["tokens_used"]
+                total_cost += result.get("cost", 0.0)
+            
+            # Print result
             if "error" not in result:
-                print(f"✅ {os.path.basename(file_path)} - {result.get('language', 'unknown')}")
+                quality_str = f" | Quality: {result.get('quality_score', 'N/A')}/10" if result.get('quality_score') else ""
+                print(f"✅ {os.path.basename(file_path)} - {result.get('language', 'unknown')}{quality_str}")
             else:
                 print(f"❌ {os.path.basename(file_path)} - {result['error']}")
+        
+        # Print final token usage summary
+        if total_tokens > 0:
+            print(f"\n💰 Token Usage Summary:")
+            print(f"📊 Total tokens used: {total_tokens:,}")
+            print(f"💵 Estimated cost: ${total_cost:.4f}")
+            print(f"📈 Average per file: {total_tokens/len(results):,.0f} tokens")
         
         # Update abilities index
         try:
@@ -294,11 +366,11 @@ async def analyze_command(args):
     # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)
     
-    print("🚀 Starting enhanced analysis...")
-    print(f"📂 Target: {target_path}")
-    print(f"📊 Analysis Level: {analysis_level}")
-    print(f"📁 Scan Folder: {scan_folder}")
-    print(f"📁 Output Directory: {output_dir}")
+    print("[*] Starting enhanced analysis...")
+    print(f"[>] Target: {target_path}")
+    print(f"[>] Analysis Level: {analysis_level}")
+    print(f"[>] Scan Folder: {scan_folder}")
+    print(f"[>] Output Directory: {output_dir}")
     print()
     
     analyzer = EnhancedAnalyzer()
@@ -307,7 +379,12 @@ async def analyze_command(args):
         if os.path.isfile(target_path):
             result = await analyzer.analyze_file(target_path, analysis_level, output_dir)
         elif os.path.isdir(target_path):
-            result = await analyzer.analyze_directory(target_path, analysis_level, output_dir)
+            result = await analyzer.analyze_directory(
+                target_path, analysis_level, output_dir,
+                budget=getattr(args, 'budget', None),
+                sample=getattr(args, 'sample', None),
+                incremental=getattr(args, 'incremental', False)
+            )
         else:
             print(f"❌ Path not found: {target_path}")
             return 1
@@ -365,5 +442,15 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    exit_code = asyncio.run(analyze_command(args.path, args.level, args.output))
+    # Create args object for analyze_command
+    analyze_args = type('Args', (), {
+        'target': args.path,
+        'level': args.level,
+        'output': args.output,
+        'budget': None,
+        'sample': None,
+        'incremental': False
+    })()
+    
+    exit_code = asyncio.run(analyze_command(analyze_args))
     sys.exit(exit_code)
