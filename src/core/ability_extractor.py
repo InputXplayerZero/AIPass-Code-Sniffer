@@ -2,8 +2,8 @@
 import os
 import sys
 import json
-from code_summarizer import analyze_code, format_as_markdown as format_summary_as_markdown
-from dependency_visualizer import analyze_dependencies, format_as_dot
+from .code_summarizer import analyze_code, format_as_markdown as format_summary_as_markdown
+from .dependency_visualizer import analyze_dependencies, format_as_dot
 
 ABILITY_CARD_TEMPLATE = """
 # Ability Card: {ability_name}

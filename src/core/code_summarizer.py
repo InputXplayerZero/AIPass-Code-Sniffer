@@ -86,7 +86,7 @@ def analyze_typescript_code(file_path):
     """
     try:
         # Construct the command to run the Node.js script
-        script_path = os.path.join(os.path.dirname(__file__), 'ts_analyzer_cli.js')
+        script_path = os.path.join(os.path.dirname(__file__), '..', 'analyzers', 'typescript', 'ts_analyzer_cli.js')
         command = ['node', script_path, file_path]
         
         # Execute the command

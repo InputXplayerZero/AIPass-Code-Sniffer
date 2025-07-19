@@ -1,0 +1,29 @@
+{
+  "analysis": {
+    "supported_languages": ["python", "typescript", "javascript"],
+    "output_formats": ["markdown", "json", "dot"],
+    "max_file_size_mb": 10,
+    "max_files_per_analysis": 1000
+  },
+  "typescript": {
+    "analyzer_script": "../analyzers/typescript/ts_analyzer_cli.js",
+    "node_executable": "node",
+    "typescript_config": "tsconfig.json"
+  },
+  "output": {
+    "ability_cards_dir": "./output/ability_cards",
+    "dependency_graphs_dir": "./output/dependency_graphs", 
+    "reports_dir": "./output/reports"
+  },
+  "quality_assessment": {
+    "semantic_analysis_enabled": false,
+    "pattern_recognition_enabled": false,
+    "business_context_analysis_enabled": false,
+    "cross_file_analysis_enabled": false,
+    "quality_scoring_enabled": false
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "./logs/code_sniffer.log"
+  }
+}
