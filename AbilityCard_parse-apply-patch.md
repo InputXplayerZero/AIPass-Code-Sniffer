@@ -1,7 +1,7 @@
 
 # Ability Card: Parse-Apply-Patch
 
-**Project:** `codex-main`
+**Project:** `codex-cli`
 
 **Description:**
 (A brief, one-sentence description of the ability's primary function, to be filled in manually).
@@ -18,7 +18,7 @@
 
 ### Code Summary
 
-# Analysis for `C:\Source-Codebase\codex-main\codex-cli\src\parse-apply-patch.ts`
+# Analysis for `codex-main/codex-cli/src/parse-apply-patch.ts`
 
 ## Top-Level Functions
 
